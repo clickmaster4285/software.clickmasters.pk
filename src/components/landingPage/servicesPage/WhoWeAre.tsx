@@ -44,6 +44,7 @@ export function WhoWeAre({ slug }: WhoWeAreProps) {
           <span className="h-[2px] w-8 rounded-full bg-primary" />
 
           <SplitText
+            as="h2"
             text="Who We Are"
             className="text-2xl md:text-3xl font-bold uppercase tracking-[0.25em] text-primary"
             delay={60}

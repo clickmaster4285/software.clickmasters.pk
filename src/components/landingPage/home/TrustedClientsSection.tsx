@@ -211,6 +211,7 @@ export function TrustedClientsSection() {
             <span className="h-[2px] w-8 rounded-full bg-primary" />
             <div className="inline-flex items-center gap-1.5 mt-6">
               <SplitText
+                as="h2"
                 text="Trusted By Industry Leaders"
                 className="text-2xl md:text-3xl font-bold uppercase tracking-[0.25em] text-primary"
                 delay={60}

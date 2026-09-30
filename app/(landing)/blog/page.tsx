@@ -10,7 +10,7 @@ export default async function BlogPage() {
   let initialPosts: BlogCard[] = [];
 
   try {
-    initialPosts = await apiGet<BlogCard[]>('/api/blog', { cache: 'no-store' });
+    initialPosts = await apiGet<BlogCard[]>('/api/blog', { next: { revalidate: 300 } });
   } catch (error) {
     console.error('BlogPage SSR API fetch failed, trying DB fallback:', error);
     try {

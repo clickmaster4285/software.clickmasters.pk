@@ -72,9 +72,9 @@ export function FaqSection() {
         <div className="mx-auto max-w-3xl text-center mb-12">
           <div className="inline-flex items-center gap-2 mb-3">
             <span className="h-[2px] w-8 rounded-full bg-primary" />
-            <span className="text-2xl md:text-3xl font-bold uppercase tracking-[0.25em] text-primary">
+            <h2 className="text-2xl md:text-3xl font-bold uppercase tracking-[0.25em] text-primary">
               FAQ's
-            </span>
+            </h2>
             <span className="h-[2px] w-8 rounded-full bg-primary" />
           </div>
 

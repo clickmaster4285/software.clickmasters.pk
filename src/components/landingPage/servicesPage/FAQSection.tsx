@@ -50,6 +50,7 @@ export const FAQSection = ({ faqs }: FAQSectionProps) => {
             
             <div className="inline-flex items-center gap-1.5">
               <SplitText
+                as="h2"
                 text="FAQ's"
                 className="text-2xl md:text-3xl font-bold uppercase tracking-[0.25em] text-primary"
                 delay={60}

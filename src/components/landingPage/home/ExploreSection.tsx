@@ -611,6 +611,7 @@ export default function ExploreSection({ serviceData }: { serviceData?: ServiceD
       id="services"
       className="relative overflow-hidden bg-foreground text-background py-14"
     >
+      <h2 className="sr-only">Our Software Development Services</h2>
       {/* Desktop: GSAP Animated Section (First 8) */}
       <div className="hidden md:block">
         <div ref={innerRef} className="relative h-screen">

@@ -92,6 +92,7 @@ export default function PainPointsSolutions({ countryName }: PainPointsSolutions
             
            <div className="inline-flex items-center gap-1.5">
   <SplitText
+    as="h2"
     text={
       hasLocation
         ? `Problems Businesses Face in ${countryName}`

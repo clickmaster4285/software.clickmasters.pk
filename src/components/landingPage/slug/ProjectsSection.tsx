@@ -277,7 +277,7 @@ export const ParallaxProjectsContent = ({ projects }: ParallaxProjectsContentPro
                   </Button>
                 )}
                 <Button asChild size="default" variant="outline" className="group border-orange-200 hover:border-orange-300 text-secondaryhover:text-secondaryrounded-full px-4 sm:px-5 py-2 sm:py-2.5 text-sm sm:text-base w-full sm:w-auto">
-                  <Link href={`/projects/${section.id}`}>
+                  <Link href="/case-studies">
                     Learn More
                     <ArrowDown className="ml-1.5 h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 rotate-[-90deg]" />
                   </Link>

@@ -42,6 +42,7 @@ export const ServicesSection = ({ serviceName, servicesCards }: ServicesSectionP
           <span className="h-[2px] w-8 rounded-full bg-primary hidden sm:block" />
           <div className="inline-flex items-center gap-1.5">
             <SplitText
+              as="h2"
               text={`${serviceName} Services We Deliver`}
               className="text-xl sm:text-2xl md:text-3xl font-bold uppercase tracking-[0.15em] sm:tracking-[0.25em] text-primary text-center"
               delay={60}

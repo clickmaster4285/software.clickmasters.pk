@@ -139,9 +139,9 @@ export function Footer() {
         {/* Columns */}
         {cols.map((col: any) => (
           <div key={col.title} data-footer-col>
-            <h4 className="text-lg font-bold uppercase tracking-[0.2em] text-white">
+            <h2 className="text-lg font-bold uppercase tracking-[0.2em] text-white">
               {col.title}
-            </h4>
+            </h2>
             <ul className="mt-5 space-y-3 text-sm text-background/75">
               {col.links.map((link: any) => (
                 <li key={link.name}>
