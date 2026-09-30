@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import SchemaMarkup from '@/components/SchemaMarkup';
 import { FaqSection } from '@/components/landingPage/home/FaqSection';
 import { LandingHomeDeferredHeavy } from '@/components/landingPage/home/LandingHomeDeferredHeavy';
+import { HeroSection } from '@/components/landingPage/home/hero-section';
 import { RobotMascot } from '@/components/ui/RobotMascot';
 import {  LucideIcon,} from 'lucide-react';
 import {
@@ -122,21 +123,6 @@ const homeExploreLinks: HomeExploreLink[] = [
     highlight: true,
   },
 ];
-
-const HeroSection = dynamic(
-  () =>
-    import('@/components/landingPage/home/hero-section').then((m) => m.HeroSection),
-  {
-    loading: () => (
-      <div
-        className="relative flex min-h-[100svh] items-center justify-center bg-slate-900"
-        aria-hidden
-      >
-        <div className="h-12 w-12 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-      </div>
-    ),
-  },
-);
 
 const AboutSection = dynamic(
   () => import('@/components/landingPage/home/AboutSection'),

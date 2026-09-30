@@ -39,10 +39,13 @@ export async function apiFetch<T = any>(
   }
 
   try {
-    const response = await fetch(url, {
-      ...fetchOptions,
-      cache: fetchOptions.cache ?? 'no-store',
-    });
+    const { next, ...rest } = fetchOptions as RequestInit & {
+      next?: { revalidate?: number | false; tags?: string[] };
+    };
+
+    // Allow callers to opt into ISR/data-cache. When `next` is present we must
+    // NOT also send `cache`, otherwise Next.js rejects the request.
+    const response = await fetch(url, next ? { ...rest, next } : { ...rest, cache: rest.cache ?? 'no-store' });
     return response;
   } catch (error) {
     console.error('[API Error]', error);
