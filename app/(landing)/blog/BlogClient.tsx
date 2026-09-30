@@ -258,7 +258,7 @@ export default function BlogClient({ initialPosts }: BlogClientProps) {
                           <a
                             href={authorLinkedin(featured)}
                             target="_blank"
-                            rel="noopener noreferrer"
+                            rel="noopener noreferrer nofollow"
                             onClick={(e) => e.stopPropagation()}
                             className="hover:text-primary hover:underline"
                           >
@@ -326,7 +326,7 @@ export default function BlogClient({ initialPosts }: BlogClientProps) {
                             <a
                               href={authorLinkedin(post)}
                               target="_blank"
-                              rel="noopener noreferrer"
+                              rel="noopener noreferrer nofollow"
                               onClick={(e) => e.stopPropagation()}
                               className="hover:text-primary hover:underline"
                             >
@@ -383,7 +383,7 @@ export default function BlogClient({ initialPosts }: BlogClientProps) {
                               <a
                                 href={authorLinkedin(post)}
                                 target="_blank"
-                                rel="noopener noreferrer"
+                                rel="noopener noreferrer nofollow"
                                 onClick={(e) => e.stopPropagation()}
                                 className="hover:text-primary hover:underline"
                               >

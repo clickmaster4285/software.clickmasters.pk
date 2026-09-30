@@ -62,6 +62,7 @@ export function AboutSection() {
 
            <span className="hidden h-[2px] w-8 rounded-full bg-primary sm:block" />
           <SplitText
+            as="h2"
             text="About ClickMasters"
             className="text-center text-xl font-bold uppercase tracking-[0.12em] text-primary sm:text-2xl sm:tracking-[0.25em] md:text-3xl"
             delay={60}
@@ -89,6 +90,7 @@ export function AboutSection() {
 
             <h2 className="font-display text-3xl font-bold tracking-tight sm:text-2xl lg:text-5xl leading-tight">
               <SplitText
+                as="span"
                 text="We Don't Just Build Software"
                 className="inline-block"
                 delay={50}
@@ -104,6 +106,7 @@ export function AboutSection() {
 
               <span className="relative inline-block text-primary">
                 <SplitText
+                  as="span"
                   text="We Build Revenue Systems"
                   className="inline-block text-primary"
                   delay={50}

@@ -144,6 +144,7 @@ export function PricingSection({ serviceName, pricingTiers }: PricingSectionProp
           <span className="hidden h-[2px] w-8 shrink-0 rounded-full bg-primary sm:block" />
           <div className="inline-flex max-w-full items-center justify-center gap-1.5">
             <SplitText
+              as="h2"
               text={`${serviceName} Pricing`}
               className="text-center text-xl sm:text-2xl md:text-3xl font-bold uppercase tracking-[0.1em] sm:tracking-[0.25em] text-primary"
               delay={60}

@@ -980,7 +980,7 @@ const { data: blogs = [] } = useQuery({
                   <div key={section.label} className="flex h-full flex-col">
                     {/* Category header with View All link */}
                     <div className="mb-4 flex items-center justify-between border-b border-slate-200 pb-3">
-                      <h3 className="text-base font-bold text-slate-900">{section.label}</h3>
+                      <span className="text-base font-bold text-slate-900">{section.label}</span>
                       <Link
                         href={`/${categorySlug}`}
                         onClick={closeDropdowns}
@@ -1139,9 +1139,9 @@ const { data: blogs = [] } = useQuery({
                           </div>
                         )}
                         <div className="p-4">
-                          <h4 className="font-semibold text-slate-900 group-hover:text-primary line-clamp-2 text-base">
+                          <span className="font-semibold text-slate-900 group-hover:text-primary line-clamp-2 text-base">
                             {study.title}
-                          </h4>
+                          </span>
                           {study.description && (
                             <p className="mt-2 text-sm text-slate-500 line-clamp-2">
                               {study.description}
@@ -1192,9 +1192,9 @@ const { data: blogs = [] } = useQuery({
                           </div>
                         )}
                         <div className="p-4">
-                          <h4 className="font-semibold text-slate-900 group-hover:text-primary line-clamp-2 text-base">
+                          <span className="font-semibold text-slate-900 group-hover:text-primary line-clamp-2 text-base">
                             {blog.title}
-                          </h4>
+                          </span>
                           {blog.excerpt && (
                             <p className="mt-2 text-sm text-slate-500 line-clamp-2">
                               {blog.excerpt}
@@ -1433,7 +1433,7 @@ function MobileDropdown({
       <div className="pl-4 space-y-4 mt-3">
         {items.map((section, idx) => (
           <div key={idx}>
-            <h4 className="text-sm font-semibold text-primary mb-2">{section.category}</h4>
+            <span className="text-sm font-semibold text-primary mb-2 block">{section.category}</span>
             <ul className="space-y-2">
               {section.items.map((item, itemIdx) => (
                 <li key={itemIdx}>

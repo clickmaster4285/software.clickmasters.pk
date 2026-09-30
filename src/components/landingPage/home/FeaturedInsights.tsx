@@ -196,6 +196,7 @@ const InsightsHeader = () => {
     >
       <h2 className="mt-5 font-display text-3xl font-bold tracking-tight sm:text-2xl lg:text-5xl leading-tight">
         <SplitText
+          as="span"
           text="Software Solutions"
           className="inline-block"
           delay={50}
@@ -209,6 +210,7 @@ const InsightsHeader = () => {
         {" "}
         <span className="relative inline-block text-primary">
           <SplitText
+            as="span"
             text="That Drives Growth"
             className="inline-block text-primary"
             delay={50}
@@ -359,6 +361,7 @@ return (
 
               <span className="hidden h-[2px] w-8 rounded-full bg-primary sm:block" />
             <SplitText
+              as="h2"
               text="Sucess Stories"
               className="text-center text-xl font-bold uppercase tracking-[0.14em] text-primary sm:text-2xl sm:tracking-[0.25em] md:text-3xl"
               delay={60}

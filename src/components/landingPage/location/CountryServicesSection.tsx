@@ -69,6 +69,7 @@ interface ServiceCardProps {
   slug: string;
   idx: number;
   countryName: string;
+  location?: string;
 }
 
 // Define themes matching your bento style
@@ -111,14 +112,18 @@ const THEMES = [
   },
 ];
 
-export function ServiceCard({ service, slug, idx, countryName }: ServiceCardProps) {
+export function ServiceCard({ service, slug, idx, countryName, location }: ServiceCardProps) {
   const theme = THEMES[idx % THEMES.length];
   const CardIcon = iconPool[(idx + 3) % iconPool.length];
   const stat = statPool[idx % statPool.length];
 
+  const href = location
+    ? `/locations/${location}/${slug}`
+    : `/${slug}`;
+
   return (
     <motion.a
-      href={`/${slug}`}
+      href={href}
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
@@ -188,6 +193,7 @@ export function ServiceCard({ service, slug, idx, countryName }: ServiceCardProp
 
 export default function CountryServicesSection({
   countryName,
+  location,
   servicesByCategory,
   serviceSlugMap,
 }: Props) {
@@ -286,6 +292,7 @@ export default function CountryServicesSection({
             <span className="h-[2px] w-8 rounded-full bg-primary" />
             <div className="inline-flex items-center gap-1.5">
               <SplitText
+                as="h2"
                 text={`Services We Provide in ${countryName}`}
                 className="text-2xl md:text-3xl font-bold uppercase tracking-[0.25em] text-primary"
                 delay={60}
@@ -383,6 +390,7 @@ export default function CountryServicesSection({
                           slug={serviceSlugMap[service]}
                           idx={idx}
                           countryName={countryName}
+                          location={location}
                         />
                       ))}
                     </div>
@@ -416,6 +424,7 @@ export default function CountryServicesSection({
                           slug={serviceSlugMap[service]}
                           idx={idx + 4}
                           countryName={countryName}
+                          location={location}
                         />
                       ))}
                     </div>

@@ -137,6 +137,7 @@ export const IndustriesSection = ({
 
             <div className="inline-flex items-center gap-1.5 mt-6">
               <SplitText
+                as="h2"
                 text="Industry Expertise"
                 className="text-2xl md:text-3xl font-bold uppercase tracking-[0.25em] text-primary"
                 delay={60}

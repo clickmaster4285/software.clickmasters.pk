@@ -131,6 +131,7 @@ export function WhyChooseUs({
           <div className="flex max-w-full flex-wrap items-center justify-center gap-3">
             <span className="hidden h-[2px] w-8 rounded-full bg-primary/60 sm:block" />
             <SplitText
+              as="h2"
               text={subtitle}
               className="text-center text-2xl font-bold text-primary md:text-4xl"
               delay={60}

@@ -202,7 +202,7 @@ const phrases: string[] = [
   className="mt-8"
 >
   <Link
-    href="/admin/login"
+    href="/contact-us"
     className="bg-primary hover:bg-primary text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 inline-block text-center"
   >
     Get Started

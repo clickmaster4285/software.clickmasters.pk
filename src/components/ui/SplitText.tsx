@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, createElement } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SplitType from "split-type";
@@ -19,6 +19,7 @@ interface SplitTextProps {
   from?: gsap.TweenVars;
   to?: gsap.TweenVars;
   threshold?: number;
+  as?: "p" | "h2" | "h3" | "span";
 }
 
 export default function SplitText({
@@ -31,8 +32,9 @@ export default function SplitText({
   from = { opacity: 0, x: 40 },
   to = { opacity: 1, x: 0 },
   threshold = 0.2,
+  as = "p",
 }: SplitTextProps) {
-  const ref = useRef<HTMLParagraphElement>(null);
+  const ref = useRef<HTMLElement>(null);
   const splitRef = useRef<SplitType | null>(null);
   const animationRef = useRef<gsap.core.Tween | null>(null);
 
@@ -81,9 +83,9 @@ export default function SplitText({
     };
   }, [text, delay, duration, ease, splitType, threshold, from, to]);
 
-  return (
-    <p ref={ref} className={className}>
-      {text}
-    </p>
+  return createElement(
+    as,
+    { ref, className },
+    text
   );
 }
