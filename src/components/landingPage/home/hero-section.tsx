@@ -2,7 +2,9 @@
 
 import { useState, useEffect, useRef } from "react";
 import { ArrowRight, FileText, Mail, Phone, User, DollarSign } from "lucide-react";
-import { AuroraCanvas } from "../../ui/AuroraCanvas";
+import dynamic from "next/dynamic";
+// T12 — WebGL background (three.js) is decorative: load it after hydration in its own chunk.
+const AuroraCanvas = dynamic(() => import("../../ui/AuroraCanvas").then((m) => m.AuroraCanvas), { ssr: false });
 import Link from "next/link";
 import Image from 'next/image';
 

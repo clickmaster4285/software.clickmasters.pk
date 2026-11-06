@@ -47,44 +47,44 @@ const nextConfig: NextConfig = {
       {
         source: "/nlp-computer-vision/computer-vision-solutions",
         destination: "/nlp-computer-vision/computer-vision",
-        permanent: true,
+        statusCode: 301, // audit expects 301 (Next uses 308 for permanent: true)
       },
       {
         source: "/nlp-computer-vision/natural-language-processing-nlp",
         destination: "/nlp-computer-vision/natural-language-processing",
-        permanent: true,
+        statusCode: 301, // audit expects 301 (Next uses 308 for permanent: true)
       },
       {
         source: "/nlp-computer-vision/speech-recognition-systems",
         destination: "/nlp-computer-vision/speech-recognition",
-        permanent: true,
+        statusCode: 301, // audit expects 301 (Next uses 308 for permanent: true)
       },
       // T9 — CTA image moved from PNG to WebP
       {
         source: "/images/ctaImage.png",
         destination: "/images/ctaImage.webp",
-        permanent: true,
+        statusCode: 301, // audit expects 301 (Next uses 308 for permanent: true)
       },
       // T7 — thin hire page cannibalising the custom software development service page
       {
         source: "/hire/custom-software-development",
         destination: "/software-development/custom-software-development",
-        permanent: true,
+        statusCode: 301, // audit expects 301 (Next uses 308 for permanent: true)
       },
       {
         source: "/services",
         destination: "/software-solutions",
-        permanent: true,
+        statusCode: 301, // audit expects 301 (Next uses 308 for permanent: true)
       },
       {
         source: "/services/:path*",
         destination: "/:path*",
-        permanent: true,
+        statusCode: 301, // audit expects 301 (Next uses 308 for permanent: true)
       },
       {
         source: "/locations/:location/services/:service",
         destination: "/locations/:location/:service",
-        permanent: true,
+        statusCode: 301, // audit expects 301 (Next uses 308 for permanent: true)
       },
     ];
   },

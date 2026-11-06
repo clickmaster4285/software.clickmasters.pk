@@ -31,7 +31,7 @@ import { useQuery } from '@tanstack/react-query';
 import { apiFetch } from '@/lib/api';
 import { getCategoryName } from '@/lib/utils';
 // Lightweight menu data only — never import service-pages/faq here (keeps them out of the client bundle).
-import { getServiceNavPath as getServicePath, serviceMenuSections } from '@/lib/service-nav';
+import { getServiceNavPath as getServicePath, serviceMenuSections, categorySlugFromSectionLabel } from '@/lib/service-nav';
 
 export type NavFaqPreview = {
   question: string;
@@ -941,11 +941,7 @@ const { data: blogs = [] } = useQuery({
     {serviceSections.map((section) => {
       const active = section.label === activeServiceSection;
       // Create URL-friendly slug for the category
-      const categorySlug = section.label
-        .toLowerCase()
-        .replace(/&/g, 'and')
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-|-$/g, '');
+      const categorySlug = categorySlugFromSectionLabel(section.label);
       
       return (
         <li key={section.label}>
@@ -989,11 +985,7 @@ const { data: blogs = [] } = useQuery({
           <div className="col-span-9 h-full p-8 overflow-y-auto">
             {serviceSections
               .map((section) => {
-                const categorySlug = section.label
-                  .toLowerCase()
-                  .replace(/&/g, 'and')
-                  .replace(/[^a-z0-9]+/g, '-')
-                  .replace(/^-|-$/g, '');
+                const categorySlug = categorySlugFromSectionLabel(section.label);
                 
                 return (
                   <div key={section.label} className={cn("flex h-full flex-col", section.label !== activeServiceSection && "hidden")}>

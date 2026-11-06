@@ -6,7 +6,9 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import { ServiceData } from '@/src/lib/services';
-import PixelBlast from '../../ui/pixelBlast';
+import dynamic from 'next/dynamic';
+// T12 — WebGL background (three.js) is decorative: load it after hydration in its own chunk.
+const PixelBlast = dynamic(() => import('../../ui/pixelBlast'), { ssr: false });
 
 
 // Counter component with animation

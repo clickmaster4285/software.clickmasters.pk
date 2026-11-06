@@ -5,8 +5,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ChevronRight, Star, Award, Layers3, Users, Headphones } from 'lucide-react';
-import PixelBlast from '../../ui/pixelBlast';
-import Aurora from '../../ui/Aurora';
+import dynamic from 'next/dynamic';
+// T12 — WebGL background (three.js) is decorative: load it after hydration in its own chunk.
+const Aurora = dynamic(() => import('../../ui/Aurora'), { ssr: false });
 
 // Counter component with animation
 function Counter({ targetValue }: { targetValue: string | number }) {

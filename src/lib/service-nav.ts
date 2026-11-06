@@ -27,6 +27,8 @@ export function categorySlugFromSectionLabel(label: string): string {
  const fromMenu = slugify(label);
  const aliases: Record<string, string> = {
   'cloud-devops': 'cloud-and-devops',
+  'testing-qa': 'testing-and-qa',
+  'support-outsourcing': 'support-and-outsourcing',
   'blockchain-web3': 'blockchain-and-web3',
   'data-intelligence': 'data-and-intelligence',
   'automation-integration': 'automation-and-integration',
