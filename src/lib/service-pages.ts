@@ -62,265 +62,9 @@ export type ServicePageContent = {
  technologies?: TechStackSection[];
 };
 
-export type ServiceMenuSection = {
- label: string;
- items: { title: string; description: string }[];
-};
-
-export function slugify(value: string): string {
- return value
- .toLowerCase()
- .trim()
- .replace(/['"]/g, '')
- .replace(/[^a-z0-9]+/g, '-')
- .replace(/^-+|-+$/g, '');
-}
-
-/** Align menu-derived category slugs with `services.ts` hub paths. */
-function categorySlugFromSectionLabel(label: string): string {
- const fromMenu = slugify(label);
- const aliases: Record<string, string> = {
-  'cloud-devops': 'cloud-and-devops',
-  'blockchain-web3': 'blockchain-and-web3',
-  'data-intelligence': 'data-and-intelligence',
-  'automation-integration': 'automation-and-integration',
-  'automation-chatbot': 'automation-and-chatbot',
-  'iot-emerging-tech': 'iot-and-emerging-tech',
- };
- return aliases[fromMenu] ?? fromMenu;
-}
-
-
-
-
-
-export const serviceMenuSections: ServiceMenuSection[] = [
-  {
- label: 'Software Development',
- items: [
-      { title: 'Custom Software Development', description: 'Tailored software for specific business goals.' },
-      { title: 'Enterprise Software Development', description: 'Scalable enterprise platforms and workflows.' },
-      { title: 'SaaS Product Development', description: 'Cloud-based SaaS products with recurring value.' },
-      { title: 'MVP Development', description: 'Fast MVP releases to validate ideas.' },
-      { title: 'Desktop Application Development', description: 'Reliable desktop apps for business operations.' },
-      { title: 'API Development & Integration', description: 'Robust APIs and third-party integrations.' },
-      { title: 'Microservices Architecture', description: 'Distributed systems built for scale.' },
-      { title: 'Backend Development', description: 'Secure, high-performance backend services.' },
-      { title: 'Frontend Development', description: 'Responsive, accessible frontend experiences.' },
-      { title: 'Full Stack Development', description: 'End-to-end product development support.' },
- ],
-  },
-  {
- label: 'Web Development',
- items: [
-      { title: 'Web Application Development', description: 'Modern web apps and business portals.' },
-      { title: 'Website Development', description: 'SEO-friendly websites that convert.' },
-      { title: 'PWA Development', description: 'Installable web apps with offline support.' },
-      { title: 'Headless CMS Development', description: 'Flexible content systems with API delivery.' },
-      { title: 'JAMstack Development', description: 'Fast static-first web architectures.' },
-      { title: 'E-commerce Development', description: 'Scalable online stores and checkout flows.' },
-      { title: 'Headless E-commerce', description: 'Composable commerce for modern storefronts.' },
-      { title: 'Shopify Development', description: 'Custom Shopify storefront and app work.' },
-      { title: 'WooCommerce Development', description: 'WordPress commerce customization and support.' },
- ],
-  },
-  {
- label: 'Mobile Development',
- items: [
-      { title: 'Mobile App Development', description: 'Mobile products for iOS and Android users.' },
-      { title: 'Android App Development', description: 'Native Android apps with strong performance.' },
-      { title: 'iOS App Development', description: 'Native iOS apps built for Apple ecosystem.' },
-      { title: 'Cross-Platform App Development', description: 'Shared-code apps for faster delivery.' },
-      { title: 'Flutter App Development', description: 'Flutter apps with consistent UI.' },
-      { title: 'React Native Development', description: 'React Native apps with reusable components.' },
- ],
-  },
-  {
- label: 'Design UI/UX',
- items: [
-      { title: 'UI/UX Design Services', description: 'User-first interfaces with measurable outcomes.' },
-      { title: 'Product Design', description: 'End-to-end product thinking and execution.' },
-      { title: 'Web Design', description: 'Modern web layouts with clear hierarchy.' },
-      { title: 'Mobile App Design', description: 'Mobile-first design systems and flows.' },
-      { title: 'UX Research', description: 'Research-backed decisions for better usability.' },
-      { title: 'Wireframing & Prototyping', description: 'Rapid wireframes and interactive prototypes.' },
-      { title: 'Design Systems', description: 'Reusable design language and component patterns.' },
- ],
-  },
-  {
- label: 'Artificial Intelligence (AI)',
- items: [
-      { title: 'Generative AI Solutions', description: 'LLM-powered generation and automation workflows.' },
-      { title: 'AI Experts', description: 'Expert advisors for AI strategy and implementation.' },
-      { title: 'AI Developers', description: 'Custom AI applications built by expert developers.' },
-      { title: 'AI Prompt Engineers', description: 'Prompt engineering for high-quality model outputs.' },
-      { title: 'AI Chatbot Development', description: 'Conversational assistants for support and sales.' },
-      { title: 'AI Agents Development', description: 'Autonomous agents for business operations.' },
-      { title: 'AI Automation Systems', description: 'Intelligent automation across repetitive tasks.' },
-      { title: 'AI Integration Services', description: 'Integrate AI capabilities into existing systems.' },
-      { title: 'AI Model Development', description: 'Custom model development and deployment.' },
-      { title: 'LLM Applications Development', description: 'Production-grade LLM applications and tooling.' },
- ],
-  },
-  {
- label: 'Machine Learning (ML)',
- items: [
-      { title: 'Machine Learning Solutions', description: 'ML systems tailored to your domain data.' },
-      { title: 'Machine Learning Experts', description: 'Expert ML practitioners for model-driven products.' },
-      { title: 'Predictive Analytics', description: 'Forecasting models to guide decisions.' },
-      { title: 'Recommendation Systems', description: 'Personalized recommendations for engagement.' },
-      { title: 'Model Training Optimisation', description: 'Training pipelines and model performance tuning.' },
-      { title: 'Deep Learning Solutions', description: 'Advanced neural models for complex problems.' },
-      { title: 'Deep Learning Experts', description: 'Specialists in deep learning architecture and deployment.' },
- ],
-  },
-  {
- label: 'NLP & Computer Vision',
- items: [
-      { title: 'Natural Language Processing', description: 'Text understanding and language workflows.' },
-      { title: 'Speech Recognition', description: 'Voice-to-text and speech processing solutions.' },
-      { title: 'Text Analytics', description: 'Insights from unstructured text data.' },
-      { title: 'Computer Vision', description: 'Image and video understanding pipelines.' },
-      { title: 'Image Processing', description: 'Image enhancement, detection, and classification.' },
-      { title: 'Video Analytics', description: 'Real-time and batch video intelligence.' },
- ],
-  },
-  {
- label: 'Data Services',
- items: [
-      { title: 'Data Science & Analytics', description: 'Data-driven strategy and advanced analytics.' },
-      { title: 'Business Intelligence (BI)', description: 'BI dashboards and business reporting systems.' },
-      { title: 'Data Engineering', description: 'Reliable pipelines and data platform architecture.' },
-      { title: 'Data Warehousing', description: 'Warehouse design for analytics at scale.' },
-      { title: 'Data Visualization', description: 'Clear visual storytelling with data.' },
-      { title: 'Big Data Solutions', description: 'Large-scale data processing infrastructure.' },
- ],
-  },
-  {
- label: 'Data & Intelligence',
- items: [
-      { title: 'Data Scraping Specialists', description: 'Extract the data you need from the open web and internal sources.' },
-      { title: 'Web Scraping Specialists', description: 'Reliable web scraping services for structured data collection.' },
-      { title: 'Excel Experts', description: 'Advanced spreadsheet automation and analytics in Excel.' },
-      { title: 'Google Sheets Experts', description: 'Automated Google Sheets workflows and data solutions.' },
-      { title: 'Power BI Developers', description: 'Interactive dashboards and reporting with Power BI.' },
-      { title: 'Data Scientists', description: 'Expert data science to turn your data into business insights.' },
-      { title: 'Data Engineers', description: 'Data pipeline and infrastructure engineering for analytics-ready systems.' },
-      { title: 'Tableau Developers', description: 'Visual analytics and dashboard development in Tableau.' },
-      { title: 'SQL Database Developers', description: 'SQL database development for fast, reliable data storage and queries.' },
- ],
-  },
-  {
- label: 'Automation & Chatbot',
- items: [
-      { title: 'Chatbot Developers', description: 'Custom chatbot development for support and engagement.' },
-      { title: 'Chatbot Marketing Experts', description: 'Drive conversions and lead capture with chatbot marketing.' },
-      { title: 'Chatbot UX Writers', description: 'Conversational UX writing for effective chatbot experiences.' },
-      { title: 'Process Automation Experts', description: 'Automate repetitive business processes with intelligent workflows.' },
-      { title: 'Python Automation Experts', description: 'Python automation solutions for repetitive and data-driven tasks.' },
-      { title: 'Software Automation Experts', description: 'Software automation to remove manual effort and improve quality.' },
-      { title: 'Web Automation Experts', description: 'Web automation for testing, scraping, and workflow automation.' },
-      { title: 'Marketing Automation Experts', description: 'Marketing automation systems for campaigns and lead nurture.' },
- ],
-  },
-  {
- label: 'Automation & Integration',
- items: [
-      { title: 'Business Process Automation', description: 'Automate repetitive business workflows.' },
-      { title: 'Workflow Automation', description: 'Orchestrated process automation across teams.' },
-      { title: 'RPA', description: 'RPA bots for operational efficiency.' },
-      { title: 'System Integration', description: 'Connect platforms and eliminate silos.' },
-      { title: 'API Integration', description: 'Reliable integration between tools and services.' },
-      { title: 'Web Scraping & Data Extraction', description: 'Structured data extraction for operations.' },
- ],
-  },
-  {
- label: 'Cloud & DevOps',
- items: [
-      { title: 'Cloud Solutions', description: 'Cloud architecture and migration services.' },
-      { title: 'Cloud Solutions DevOps', description: 'Cloud architecture with DevOps practices.' },
-      { title: 'Cloud-Native Development', description: 'Cloud-native apps built for resilience.' },
-      { title: 'DevOps Services', description: 'Delivery pipelines and release automation.' },
-      { title: 'DevSecOps', description: 'Security integrated into DevOps practices.' },
-      { title: 'CI/CD Pipeline Setup', description: 'Automated build, test, and deployment workflows.' },
-      { title: 'Serverless Architecture', description: 'Event-driven serverless application design.' },
-      { title: 'Containerisation', description: 'Containerized deployments at scale.' },
-      { title: 'Infrastructure as Code', description: 'Versioned, repeatable infrastructure setup.' },
- ],
-  },
-  {
- label: 'Database Services',
- items: [
-      { title: 'Database Design', description: 'Data models optimized for real workloads.' },
-      { title: 'Database Management', description: 'Database operations, reliability, and health.' },
-      { title: 'Data Migration', description: 'Safe migration with minimal downtime.' },
-      { title: 'Database Optimisation', description: 'Performance tuning for faster queries.' },
-      { title: 'SQL & NoSQL Solutions', description: 'Right-fit SQL and NoSQL implementations.' },
- ],
-  },
-  {
- label: 'Cybersecurity',
- items: [
-      { title: 'Cybersecurity Services', description: 'Security posture improvements and hardening.' },
-      { title: 'Security Audits', description: 'Comprehensive infrastructure and app audits.' },
-      { title: 'Penetration Testing', description: 'Controlled security testing by experts.' },
-      { title: 'Vulnerability Assessment', description: 'Find and prioritize security weaknesses.' },
-      { title: 'Compliance & Risk Management', description: 'Controls and governance for compliance.' },
-      { title: 'Application Security', description: 'Secure SDLC and application hardening.' },
- ],
-  },
-  {
- label: 'Testing & QA',
- items: [
-      { title: 'QA & Software Testing', description: 'Comprehensive QA strategies and execution.' },
-      { title: 'Automated Testing', description: 'Reliable test automation for faster releases.' },
-      { title: 'Manual Testing', description: 'Thorough exploratory and scenario-based testing.' },
-      { title: 'Performance Testing', description: 'Measure and optimize system performance.' },
-      { title: 'Load Testing', description: 'Validate reliability under peak traffic.' },
-      { title: 'Bug Fixing', description: 'Rapid issue resolution and stabilization.' },
- ],
-  },
-  {
- label: 'Support & Outsourcing',
- items: [
-      { title: 'Maintenance & Support', description: 'Ongoing maintenance and product support.' },
-      { title: 'Dedicated Development Teams', description: 'Skilled dedicated teams for long-term work.' },
-      { title: 'IT Outsourcing', description: 'Flexible outsourcing for technical delivery.' },
-      { title: 'Staff Augmentation', description: 'On-demand engineers to scale your team.' },
-      { title: 'Technical Support', description: 'Reliable support for systems and users.' },
- ],
-  },
-  {
- label: 'Blockchain & Web3',
- items: [
-      { title: 'Blockchain Development', description: 'Blockchain platforms and custom protocols.' },
-      { title: 'Smart Contract Development', description: 'Secure smart contract implementation.' },
-      { title: 'DApp Development', description: 'DApp architecture and frontend integration.' },
-      { title: 'Web3 Development', description: 'Web3 product development and integrations.' },
-      { title: 'Crypto Wallet Development', description: 'Wallet apps with secure asset handling.' },
-      { title: 'NFT Marketplace Development', description: 'NFT marketplace platforms and tooling.' },
-      { title: 'Token Development', description: 'Token standards and launch support.' },
- ],
-  },
-  {
- label: 'IoT & Emerging Tech',
- items: [
-      { title: 'IoT Development', description: 'Connected device ecosystems and dashboards.' },
-      { title: 'Smart Systems Development', description: 'Intelligent systems with real-time control.' },
-      { title: 'Industrial IoT', description: 'Industrial monitoring and automation solutions.' },
-      { title: 'Embedded Systems Development', description: 'Embedded firmware and hardware integration.' },
- ],
-  },
-  {
- label: 'Immersive Tech',
- items: [
-      { title: 'AR Development', description: 'Augmented reality experiences and apps.' },
-      { title: 'VR Development', description: 'Virtual reality applications for training and products.' },
-      { title: 'Mixed Reality Solutions', description: 'Mixed reality for collaborative experiences.' },
-      { title: '3D Application Development', description: 'Interactive 3D applications and simulations.' },
- ],
-  },
-];
+export type { ServiceMenuSection } from './service-nav';
+import { serviceMenuSections, slugify, categorySlugFromSectionLabel } from './service-nav';
+export { serviceMenuSections, slugify } from './service-nav';
 
 const baseServices: ServicePageContent[] = serviceMenuSections.flatMap((section) =>
  section.items.map((item) => {
@@ -18144,358 +17888,358 @@ export function getServicePath(category: string, title: string): string {
 // Master list of all technologies with icons - COMPLETE EDITION
 export const allTechnologies: Record<string, Technology> = {
   // ==================== BACKEND LANGUAGES ====================
- dotnet: { name: ".NET", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dotnetcore/dotnetcore-original.svg" },
- dotnetframework: { name: ".NET Framework", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-original.svg" },
- csharp: { name: "C#", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" },
- fsharp: { name: "F#", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fsharp/fsharp-original.svg" },
- java: { name: "Java", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" },
- kotlin: { name: "Kotlin", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-original.svg" },
- scala: { name: "Scala", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/scala/scala-original.svg" },
- python: { name: "Python", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
- nodejs: { name: "Node.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
- deno: { name: "Deno", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/denojs/denojs-original.svg" },
+ dotnet: { name: ".NET", icon: "/icons/tech/dotnetcore/dotnetcore-original.svg" },
+ dotnetframework: { name: ".NET Framework", icon: "/icons/tech/dot-net/dot-net-original.svg" },
+ csharp: { name: "C#", icon: "/icons/tech/csharp/csharp-original.svg" },
+ fsharp: { name: "F#", icon: "/icons/tech/fsharp/fsharp-original.svg" },
+ java: { name: "Java", icon: "/icons/tech/java/java-original.svg" },
+ kotlin: { name: "Kotlin", icon: "/icons/tech/kotlin/kotlin-original.svg" },
+ scala: { name: "Scala", icon: "/icons/tech/scala/scala-original.svg" },
+ python: { name: "Python", icon: "/icons/tech/python/python-original.svg" },
+ nodejs: { name: "Node.js", icon: "/icons/tech/nodejs/nodejs-original.svg" },
+ deno: { name: "Deno", icon: "/icons/tech/denojs/denojs-original.svg" },
  bun: { name: "Bun", icon: "https://bun.sh/icon.png" }, // Custom icon
- php: { name: "PHP", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" },
- go: { name: "Go", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original-wordmark.svg" },
- ruby: { name: "Ruby", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ruby/ruby-original.svg" },
- rust: { name: "Rust", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg" },
- elixir: { name: "Elixir", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/elixir/elixir-original.svg" },
- erlang: { name: "Erlang", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/erlang/erlang-original.svg" },
- haskell: { name: "Haskell", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/haskell/haskell-original.svg" },
- clojure: { name: "Clojure", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/clojure/clojure-original.svg" },
- groovy: { name: "Groovy", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/groovy/groovy-original.svg" },
- perl: { name: "Perl", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/perl/perl-original.svg" },
- lua: { name: "Lua", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/lua/lua-original.svg" },
- r: { name: "R", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/r/r-original.svg" },
- julia: { name: "Julia", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/julia/julia-original.svg" },
- dart: { name: "Dart", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dart/dart-original.svg" },
- crystal: { name: "Crystal", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/crystal/crystal-original.svg" },
- nim: { name: "Nim", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nim/nim-original.svg" },
+ php: { name: "PHP", icon: "/icons/tech/php/php-original.svg" },
+ go: { name: "Go", icon: "/icons/tech/go/go-original-wordmark.svg" },
+ ruby: { name: "Ruby", icon: "/icons/tech/ruby/ruby-original.svg" },
+ rust: { name: "Rust", icon: "/icons/tech/rust/rust-original.svg" },
+ elixir: { name: "Elixir", icon: "/icons/tech/elixir/elixir-original.svg" },
+ erlang: { name: "Erlang", icon: "/icons/tech/erlang/erlang-original.svg" },
+ haskell: { name: "Haskell", icon: "/icons/tech/haskell/haskell-original.svg" },
+ clojure: { name: "Clojure", icon: "/icons/tech/clojure/clojure-original.svg" },
+ groovy: { name: "Groovy", icon: "/icons/tech/groovy/groovy-original.svg" },
+ perl: { name: "Perl", icon: "/icons/tech/perl/perl-original.svg" },
+ lua: { name: "Lua", icon: "/icons/tech/lua/lua-original.svg" },
+ r: { name: "R", icon: "/icons/tech/r/r-original.svg" },
+ julia: { name: "Julia", icon: "/icons/tech/julia/julia-original.svg" },
+ dart: { name: "Dart", icon: "/icons/tech/dart/dart-original.svg" },
+ crystal: { name: "Crystal", icon: "/icons/tech/crystal/crystal-original.svg" },
+ nim: { name: "Nim", icon: "/icons/tech/nim/nim-original.svg" },
  vlang: { name: "V", icon: "https://vlang.io/img/v-logo.svg" }, // Custom icon
  zig: { name: "Zig", icon: "https://ziglang.org/logo.svg" }, // Custom icon
- ocaml: { name: "OCaml", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ocaml/ocaml-original.svg" },
- pascal: { name: "Pascal", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pascal/pascal-original.svg" },
- cobol: { name: "COBOL", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cobol/cobol-original.svg" },
- fortran: { name: "Fortran", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fortran/fortran-original.svg" },
+ ocaml: { name: "OCaml", icon: "/icons/tech/ocaml/ocaml-original.svg" },
+ pascal: { name: "Pascal", icon: "/icons/tech/generic.svg" },
+ cobol: { name: "COBOL", icon: "/icons/tech/cobol/cobol-original.svg" },
+ fortran: { name: "Fortran", icon: "/icons/tech/fortran/fortran-original.svg" },
   
   // ==================== FRONTEND LANGUAGES ====================
- html5: { name: "HTML5", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" },
- css3: { name: "CSS3", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" },
- javascript: { name: "JavaScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
- typescript: { name: "TypeScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
- coffeescript: { name: "CoffeeScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/coffeescript/coffeescript-original.svg" },
- pug: { name: "Pug", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pug/pug-original.svg" },
- haml: { name: "Haml", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/haml/haml-original.svg" },
- slim: { name: "Slim", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/slim/slim-original.svg" },
- markdown: { name: "Markdown", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/markdown/markdown-original.svg" },
+ html5: { name: "HTML5", icon: "/icons/tech/html5/html5-original.svg" },
+ css3: { name: "CSS3", icon: "/icons/tech/css3/css3-original.svg" },
+ javascript: { name: "JavaScript", icon: "/icons/tech/javascript/javascript-original.svg" },
+ typescript: { name: "TypeScript", icon: "/icons/tech/typescript/typescript-original.svg" },
+ coffeescript: { name: "CoffeeScript", icon: "/icons/tech/coffeescript/coffeescript-original.svg" },
+ pug: { name: "Pug", icon: "/icons/tech/pug/pug-original.svg" },
+ haml: { name: "Haml", icon: "/icons/tech/generic.svg" },
+ slim: { name: "Slim", icon: "/icons/tech/generic.svg" },
+ markdown: { name: "Markdown", icon: "/icons/tech/markdown/markdown-original.svg" },
   
   // ==================== FRONTEND FRAMEWORKS & LIBRARIES ====================
- react: { name: "React", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
+ react: { name: "React", icon: "/icons/tech/react/react-original.svg" },
  reactquery: { name: "React Query", icon: "https://react-query.tanstack.com/_next/static/images/logo-8b1eb159dc1b7787f96196cfbaa9b449.svg" }, // Custom icon
- redux: { name: "Redux", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redux/redux-original.svg" },
- mobx: { name: "MobX", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mobx/mobx-original.svg" },
+ redux: { name: "Redux", icon: "/icons/tech/redux/redux-original.svg" },
+ mobx: { name: "MobX", icon: "/icons/tech/mobx/mobx-original.svg" },
  recoil: { name: "Recoil", icon: "https://recoiljs.org/img/logo.svg" }, // Custom icon
  zustand: { name: "Zustand", icon: "https://zustand-demo.pmnd.rs/favicon.ico" }, // Custom icon
- nextjs: { name: "Next.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" },
+ nextjs: { name: "Next.js", icon: "/icons/tech/nextjs/nextjs-original.svg" },
  remix: { name: "Remix", icon: "https://remix.run/favicon.ico" }, // Custom icon
- gatsby: { name: "Gatsby", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/gatsby/gatsby-original.svg" },
- vuejs: { name: "Vue.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg" },
+ gatsby: { name: "Gatsby", icon: "/icons/tech/gatsby/gatsby-original.svg" },
+ vuejs: { name: "Vue.js", icon: "/icons/tech/vuejs/vuejs-original.svg" },
  vuex: { name: "Vuex", icon: "https://vuex.vuejs.org/logo.png" }, // Custom icon
- nuxtjs: { name: "Nuxt.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nuxtjs/nuxtjs-original.svg" },
- angular: { name: "Angular", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg" },
- angularjs: { name: "AngularJS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg" },
- svelte: { name: "Svelte", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/svelte/svelte-original.svg" },
+ nuxtjs: { name: "Nuxt.js", icon: "/icons/tech/nuxtjs/nuxtjs-original.svg" },
+ angular: { name: "Angular", icon: "/icons/tech/angularjs/angularjs-original.svg" },
+ angularjs: { name: "AngularJS", icon: "/icons/tech/angularjs/angularjs-original.svg" },
+ svelte: { name: "Svelte", icon: "/icons/tech/svelte/svelte-original.svg" },
  sveltekit: { name: "SvelteKit", icon: "https://kit.svelte.dev/images/favicon.png" }, // Custom icon
- alpinejs: { name: "Alpine.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/alpinejs/alpinejs-original.svg" },
+ alpinejs: { name: "Alpine.js", icon: "/icons/tech/alpinejs/alpinejs-original.svg" },
  htmx: { name: "htmx", icon: "https://htmx.org/img/logo.png" }, // Custom icon
- preact: { name: "Preact", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/preact/preact-original.svg" },
+ preact: { name: "Preact", icon: "/icons/tech/generic.svg" },
  solidjs: { name: "SolidJS", icon: "https://www.solidjs.com/img/logo/without-wordmark/logo.svg" }, // Custom icon
  qwik: { name: "Qwik", icon: "https://qwik.io/favicon.svg" }, // Custom icon
- lit: { name: "Lit", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/lit/lit-original.svg" },
+ lit: { name: "Lit", icon: "/icons/tech/generic.svg" },
  stimulus: { name: "Stimulus", icon: "https://stimulus.hotwired.dev/favicon.ico" }, // Custom icon
   
   // ==================== CSS FRAMEWORKS & PREPROCESSORS ====================
- tailwindcss: { name: "Tailwind CSS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" },
- bootstrap: { name: "Bootstrap", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" },
- sass: { name: "Sass", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sass/sass-original.svg" },
- less: { name: "Less", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/less/less-plain-wordmark.svg" },
- stylus: { name: "Stylus", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/stylus/stylus-original.svg" },
- postcss: { name: "PostCSS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postcss/postcss-original.svg" },
- bulma: { name: "Bulma", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bulma/bulma-plain.svg" },
- foundation: { name: "Foundation", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/foundation/foundation-original.svg" },
- materialize: { name: "Materialize", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/materialize/materialize-original.svg" },
- semanticui: { name: "Semantic UI", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/semanticui/semanticui-original.svg" },
- uikit: { name: "UIkit", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/uikit/uikit-original.svg" },
+ tailwindcss: { name: "Tailwind CSS", icon: "/icons/tech/tailwindcss/tailwindcss-original.svg" },
+ bootstrap: { name: "Bootstrap", icon: "/icons/tech/bootstrap/bootstrap-original.svg" },
+ sass: { name: "Sass", icon: "/icons/tech/sass/sass-original.svg" },
+ less: { name: "Less", icon: "/icons/tech/less/less-plain-wordmark.svg" },
+ stylus: { name: "Stylus", icon: "/icons/tech/stylus/stylus-original.svg" },
+ postcss: { name: "PostCSS", icon: "/icons/tech/postcss/postcss-original.svg" },
+ bulma: { name: "Bulma", icon: "/icons/tech/bulma/bulma-plain.svg" },
+ foundation: { name: "Foundation", icon: "/icons/tech/foundation/foundation-original.svg" },
+ materialize: { name: "Materialize", icon: "/icons/tech/generic.svg" },
+ semanticui: { name: "Semantic UI", icon: "/icons/tech/generic.svg" },
+ uikit: { name: "UIkit", icon: "/icons/tech/generic.svg" },
  tachyons: { name: "Tachyons", icon: "https://tachyons.io/img/logo.jpg" }, // Custom icon
  chakraui: { name: "Chakra UI", icon: "https://chakra-ui.com/favicon.png" }, // Custom icon
  mantine: { name: "Mantine", icon: "https://mantine.dev/favicon.svg" }, // Custom icon
- antdesign: { name: "Ant Design", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/antdesign/antdesign-original.svg" },
- materialui: { name: "Material-UI", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/materialui/materialui-original.svg" },
+ antdesign: { name: "Ant Design", icon: "/icons/tech/antdesign/antdesign-original.svg" },
+ materialui: { name: "Material-UI", icon: "/icons/tech/materialui/materialui-original.svg" },
   
   // ==================== MOBILE DEVELOPMENT ====================
- ios: { name: "iOS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg" },
- android: { name: "Android", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/android/android-original.svg" },
- reactnative: { name: "React Native", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
- flutter: { name: "Flutter", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" },
- swift: { name: "Swift", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/swift/swift-original.svg" },
-  // kotlin: { name: "Kotlin", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-original.svg" },
- xamarin: { name: "Xamarin", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/xamarin/xamarin-original.svg" },
- ionic: { name: "Ionic", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ionic/ionic-original.svg" },
- nativescript: { name: "NativeScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nativescript/nativescript-original.svg" },
- cordova: { name: "Cordova", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cordova/cordova-original.svg" },
+ ios: { name: "iOS", icon: "/icons/tech/apple/apple-original.svg" },
+ android: { name: "Android", icon: "/icons/tech/android/android-original.svg" },
+ reactnative: { name: "React Native", icon: "/icons/tech/react/react-original.svg" },
+ flutter: { name: "Flutter", icon: "/icons/tech/flutter/flutter-original.svg" },
+ swift: { name: "Swift", icon: "/icons/tech/swift/swift-original.svg" },
+  // kotlin: { name: "Kotlin", icon: "/icons/tech/kotlin/kotlin-original.svg" },
+ xamarin: { name: "Xamarin", icon: "/icons/tech/xamarin/xamarin-original.svg" },
+ ionic: { name: "Ionic", icon: "/icons/tech/ionic/ionic-original.svg" },
+ nativescript: { name: "NativeScript", icon: "/icons/tech/generic.svg" },
+ cordova: { name: "Cordova", icon: "/icons/tech/cordova/cordova-original.svg" },
  capacitor: { name: "Capacitor", icon: "https://capacitorjs.com/favicon.ico" }, // Custom icon
  expo: { name: "Expo", icon: "https://expo.dev/favicon.ico" }, // Custom icon
   
   // ==================== DATABASES - SQL ====================
- postgresql: { name: "PostgreSQL", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" },
- mysql: { name: "MySQL", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" },
- sqlserver: { name: "SQL Server", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoftsqlserver/microsoftsqlserver-plain.svg" },
- oracle: { name: "Oracle", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/oracle/oracle-original.svg" },
- sqlite: { name: "SQLite", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg" },
- mariadb: { name: "MariaDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mariadb/mariadb-original.svg" },
- cockroachdb: { name: "CockroachDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cockroachdb/cockroachdb-original.svg" },
- db2: { name: "DB2", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/db2/db2-original.svg" },
+ postgresql: { name: "PostgreSQL", icon: "/icons/tech/postgresql/postgresql-original.svg" },
+ mysql: { name: "MySQL", icon: "/icons/tech/mysql/mysql-original.svg" },
+ sqlserver: { name: "SQL Server", icon: "/icons/tech/microsoftsqlserver/microsoftsqlserver-plain.svg" },
+ oracle: { name: "Oracle", icon: "/icons/tech/oracle/oracle-original.svg" },
+ sqlite: { name: "SQLite", icon: "/icons/tech/sqlite/sqlite-original.svg" },
+ mariadb: { name: "MariaDB", icon: "/icons/tech/mariadb/mariadb-original.svg" },
+ cockroachdb: { name: "CockroachDB", icon: "/icons/tech/generic.svg" },
+ db2: { name: "DB2", icon: "/icons/tech/generic.svg" },
   
   // ==================== DATABASES - NoSQL ====================
- mongodb: { name: "MongoDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
- redis: { name: "Redis", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg" },
- cassandra: { name: "Cassandra", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cassandra/cassandra-original.svg" },
- firebase: { name: "Firebase", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg" },
- elasticsearch: { name: "Elasticsearch", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/elasticsearch/elasticsearch-original.svg" },
- dynamodb: { name: "DynamoDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" },
- couchdb: { name: "CouchDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/couchdb/couchdb-original.svg" },
- neo4j: { name: "Neo4j", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/neo4j/neo4j-original.svg" },
- influxdb: { name: "InfluxDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/influxdb/influxdb-original.svg" },
- rethinkdb: { name: "RethinkDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rethinkdb/rethinkdb-original.svg" },
- arangodb: { name: "ArangoDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/arangodb/arangodb-original.svg" },
+ mongodb: { name: "MongoDB", icon: "/icons/tech/mongodb/mongodb-original.svg" },
+ redis: { name: "Redis", icon: "/icons/tech/redis/redis-original.svg" },
+ cassandra: { name: "Cassandra", icon: "/icons/tech/cassandra/cassandra-original.svg" },
+ firebase: { name: "Firebase", icon: "/icons/tech/firebase/firebase-plain.svg" },
+ elasticsearch: { name: "Elasticsearch", icon: "/icons/tech/elasticsearch/elasticsearch-original.svg" },
+ dynamodb: { name: "DynamoDB", icon: "/icons/tech/amazonwebservices/amazonwebservices-original-wordmark.svg" },
+ couchdb: { name: "CouchDB", icon: "/icons/tech/couchdb/couchdb-original.svg" },
+ neo4j: { name: "Neo4j", icon: "/icons/tech/neo4j/neo4j-original.svg" },
+ influxdb: { name: "InfluxDB", icon: "/icons/tech/influxdb/influxdb-original.svg" },
+ rethinkdb: { name: "RethinkDB", icon: "/icons/tech/generic.svg" },
+ arangodb: { name: "ArangoDB", icon: "/icons/tech/generic.svg" },
   
   // ==================== ORMs & DATABASE TOOLS ====================
- prisma: { name: "Prisma", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prisma/prisma-original.svg" },
- sequelize: { name: "Sequelize", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sequelize/sequelize-original.svg" },
+ prisma: { name: "Prisma", icon: "/icons/tech/prisma/prisma-original.svg" },
+ sequelize: { name: "Sequelize", icon: "/icons/tech/sequelize/sequelize-original.svg" },
  typeorm: { name: "TypeORM", icon: "https://typeorm.io/favicon.ico" }, // Custom icon
  drizzle: { name: "Drizzle", icon: "https://drizzle.team/favicon.ico" }, // Custom icon
  mongoose: { name: "Mongoose", icon: "https://mongoosejs.com/docs/images/favicon.png" }, // Custom icon
   
   // ==================== CLOUD PLATFORMS ====================
- aws: { name: "AWS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" },
- azure: { name: "Azure", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg" },
- gcp: { name: "Google Cloud", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/googlecloud/googlecloud-original.svg" },
- cloudflare: { name: "Cloudflare", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cloudflare/cloudflare-original.svg" },
- digitalocean: { name: "DigitalOcean", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/digitalocean/digitalocean-original.svg" },
- heroku: { name: "Heroku", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/heroku/heroku-original.svg" },
- netlify: { name: "Netlify", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/netlify/netlify-original.svg" },
- vercel: { name: "Vercel", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vercel/vercel-original.svg" },
+ aws: { name: "AWS", icon: "/icons/tech/amazonwebservices/amazonwebservices-original-wordmark.svg" },
+ azure: { name: "Azure", icon: "/icons/tech/azure/azure-original.svg" },
+ gcp: { name: "Google Cloud", icon: "/icons/tech/googlecloud/googlecloud-original.svg" },
+ cloudflare: { name: "Cloudflare", icon: "/icons/tech/cloudflare/cloudflare-original.svg" },
+ digitalocean: { name: "DigitalOcean", icon: "/icons/tech/digitalocean/digitalocean-original.svg" },
+ heroku: { name: "Heroku", icon: "/icons/tech/heroku/heroku-original.svg" },
+ netlify: { name: "Netlify", icon: "/icons/tech/netlify/netlify-original.svg" },
+ vercel: { name: "Vercel", icon: "/icons/tech/vercel/vercel-original.svg" },
  render: { name: "Render", icon: "https://render.com/favicon.ico" }, // Custom icon
  railway: { name: "Railway", icon: "https://railway.app/favicon.ico" }, // Custom icon
  flyio: { name: "Fly.io", icon: "https://fly.io/favicon.ico" }, // Custom icon
- linode: { name: "Linode", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linode/linode-original.svg" },
+ linode: { name: "Linode", icon: "/icons/tech/generic.svg" },
  vultr: { name: "Vultr", icon: "https://www.vultr.com/favicon.ico" }, // Custom icon
- ovh: { name: "OVHcloud", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ovh/ovh-original.svg" },
+ ovh: { name: "OVHcloud", icon: "/icons/tech/generic.svg" },
   
   // ==================== DEVOPS & CI/CD ====================
- docker: { name: "Docker", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" },
- kubernetes: { name: "Kubernetes", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg" },
- jenkins: { name: "Jenkins", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jenkins/jenkins-original.svg" },
- github: { name: "GitHub Actions", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" },
- gitlab: { name: "GitLab CI", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/gitlab/gitlab-original.svg" },
- circleci: { name: "CircleCI", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/circleci/circleci-plain.svg" },
- travisci: { name: "Travis CI", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/travis/travis-plain.svg" },
- bitbucket: { name: "Bitbucket Pipelines", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bitbucket/bitbucket-original.svg" },
- azurepipelines: { name: "Azure Pipelines", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg" },
- bamboo: { name: "Bamboo", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bamboo/bamboo-original.svg" },
- teamcity: { name: "TeamCity", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/teamcity/teamcity-original.svg" },
- concourse: { name: "Concourse", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/concourse/concourse-original.svg" },
- drone: { name: "Drone", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/drone/drone-original.svg" },
+ docker: { name: "Docker", icon: "/icons/tech/docker/docker-original.svg" },
+ kubernetes: { name: "Kubernetes", icon: "/icons/tech/kubernetes/kubernetes-plain.svg" },
+ jenkins: { name: "Jenkins", icon: "/icons/tech/jenkins/jenkins-original.svg" },
+ github: { name: "GitHub Actions", icon: "/icons/tech/github/github-original.svg" },
+ gitlab: { name: "GitLab CI", icon: "/icons/tech/gitlab/gitlab-original.svg" },
+ circleci: { name: "CircleCI", icon: "/icons/tech/circleci/circleci-plain.svg" },
+ travisci: { name: "Travis CI", icon: "/icons/tech/travis/travis-plain.svg" },
+ bitbucket: { name: "Bitbucket Pipelines", icon: "/icons/tech/bitbucket/bitbucket-original.svg" },
+ azurepipelines: { name: "Azure Pipelines", icon: "/icons/tech/azure/azure-original.svg" },
+ bamboo: { name: "Bamboo", icon: "/icons/tech/bamboo/bamboo-original.svg" },
+ teamcity: { name: "TeamCity", icon: "/icons/tech/teamcity/teamcity-original.svg" },
+ concourse: { name: "Concourse", icon: "/icons/tech/generic.svg" },
+ drone: { name: "Drone", icon: "/icons/tech/generic.svg" },
   
   // ==================== INFRASTRUCTURE AS CODE ====================
- terraform: { name: "Terraform", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/terraform/terraform-original.svg" },
- ansible: { name: "Ansible", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ansible/ansible-original.svg" },
- pulumi: { name: "Pulumi", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pulumi/pulumi-original.svg" },
- chef: { name: "Chef", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/chef/chef-original.svg" },
- puppet: { name: "Puppet", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/puppet/puppet-original.svg" },
- saltstack: { name: "SaltStack", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/saltstack/saltstack-original.svg" },
- cloudformation: { name: "CloudFormation", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" },
+ terraform: { name: "Terraform", icon: "/icons/tech/terraform/terraform-original.svg" },
+ ansible: { name: "Ansible", icon: "/icons/tech/ansible/ansible-original.svg" },
+ pulumi: { name: "Pulumi", icon: "/icons/tech/pulumi/pulumi-original.svg" },
+ chef: { name: "Chef", icon: "/icons/tech/generic.svg" },
+ puppet: { name: "Puppet", icon: "/icons/tech/generic.svg" },
+ saltstack: { name: "SaltStack", icon: "/icons/tech/generic.svg" },
+ cloudformation: { name: "CloudFormation", icon: "/icons/tech/amazonwebservices/amazonwebservices-original-wordmark.svg" },
   
   // ==================== WEB SERVERS & PROXIES ====================
- nginx: { name: "Nginx", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg" },
- apache: { name: "Apache", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apache/apache-original.svg" },
+ nginx: { name: "Nginx", icon: "/icons/tech/nginx/nginx-original.svg" },
+ apache: { name: "Apache", icon: "/icons/tech/apache/apache-original.svg" },
  caddy: { name: "Caddy", icon: "https://caddyserver.com/favicon.ico" }, // Custom icon
- tomcat: { name: "Tomcat", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tomcat/tomcat-original.svg" },
- iis: { name: "IIS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/iis/iis-original.svg" },
+ tomcat: { name: "Tomcat", icon: "/icons/tech/tomcat/tomcat-original.svg" },
+ iis: { name: "IIS", icon: "/icons/tech/generic.svg" },
   
   // ==================== BACKEND FRAMEWORKS ====================
- django: { name: "Django", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg" },
- fastapi: { name: "FastAPI", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" },
- flask: { name: "Flask", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg" },
- laravel: { name: "Laravel", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-original.svg" },
- rails: { name: "Rails", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rails/rails-original-wordmark.svg" },
- spring: { name: "Spring Boot", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg" },
- express: { name: "Express.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" },
- nestjs: { name: "NestJS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nestjs/nestjs-original.svg" },
- koa: { name: "Koa", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/koa/koa-original.svg" },
- hapi: { name: "Hapi", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/hapi/hapi-original.svg" },
- fastify: { name: "Fastify", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastify/fastify-original.svg" },
- adonisjs: { name: "AdonisJS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/adonisjs/adonisjs-original.svg" },
- strapi: { name: "Strapi", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/strapi/strapi-original.svg" },
+ django: { name: "Django", icon: "/icons/tech/django/django-plain.svg" },
+ fastapi: { name: "FastAPI", icon: "/icons/tech/fastapi/fastapi-original.svg" },
+ flask: { name: "Flask", icon: "/icons/tech/flask/flask-original.svg" },
+ laravel: { name: "Laravel", icon: "/icons/tech/laravel/laravel-original.svg" },
+ rails: { name: "Rails", icon: "/icons/tech/rails/rails-original-wordmark.svg" },
+ spring: { name: "Spring Boot", icon: "/icons/tech/spring/spring-original.svg" },
+ express: { name: "Express.js", icon: "/icons/tech/express/express-original.svg" },
+ nestjs: { name: "NestJS", icon: "/icons/tech/nestjs/nestjs-original.svg" },
+ koa: { name: "Koa", icon: "/icons/tech/generic.svg" },
+ hapi: { name: "Hapi", icon: "/icons/tech/generic.svg" },
+ fastify: { name: "Fastify", icon: "/icons/tech/fastify/fastify-original.svg" },
+ adonisjs: { name: "AdonisJS", icon: "/icons/tech/adonisjs/adonisjs-original.svg" },
+ strapi: { name: "Strapi", icon: "/icons/tech/generic.svg" },
  directus: { name: "Directus", icon: "https://directus.io/favicon.ico" }, // Custom icon
  pocketbase: { name: "PocketBase", icon: "https://pocketbase.io/favicon.ico" }, // Custom icon
   
   // ==================== AI & MACHINE LEARNING ====================
- tensorflow: { name: "TensorFlow", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg" },
- pytorch: { name: "PyTorch", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg" },
- keras: { name: "Keras", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/keras/keras-original.svg" },
- scikitlearn: { name: "Scikit-learn", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/scikitlearn/scikitlearn-original.svg" },
- opencv: { name: "OpenCV", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/opencv/opencv-original.svg" },
- numpy: { name: "NumPy", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg" },
- pandas: { name: "Pandas", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg" },
- jupyter: { name: "Jupyter", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jupyter/jupyter-original.svg" },
+ tensorflow: { name: "TensorFlow", icon: "/icons/tech/tensorflow/tensorflow-original.svg" },
+ pytorch: { name: "PyTorch", icon: "/icons/tech/pytorch/pytorch-original.svg" },
+ keras: { name: "Keras", icon: "/icons/tech/keras/keras-original.svg" },
+ scikitlearn: { name: "Scikit-learn", icon: "/icons/tech/scikitlearn/scikitlearn-original.svg" },
+ opencv: { name: "OpenCV", icon: "/icons/tech/opencv/opencv-original.svg" },
+ numpy: { name: "NumPy", icon: "/icons/tech/numpy/numpy-original.svg" },
+ pandas: { name: "Pandas", icon: "/icons/tech/pandas/pandas-original.svg" },
+ jupyter: { name: "Jupyter", icon: "/icons/tech/jupyter/jupyter-original.svg" },
  huggingface: { name: "Hugging Face", icon: "https://huggingface.co/favicon.ico" }, // Custom icon
  langchain: { name: "LangChain", icon: "https://langchain.com/favicon.ico" }, // Custom icon
  llama: { name: "Llama", icon: "https://llama.meta.com/favicon.ico" }, // Custom icon
  ollama: { name: "Ollama", icon: "https://ollama.ai/favicon.ico" }, // Custom icon
   
   // ==================== CMS & E-COMMERCE ====================
- wordpress: { name: "WordPress", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/wordpress/wordpress-plain.svg" },
- woocommerce: { name: "WooCommerce", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/woocommerce/woocommerce-original.svg" },
- drupal: { name: "Drupal", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/drupal/drupal-original.svg" },
- joomla: { name: "Joomla", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/joomla/joomla-original.svg" },
- magento: { name: "Magento", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/magento/magento-original.svg" },
- shopify: { name: "Shopify", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/shopify/shopify-original.svg" },
- prestashop: { name: "PrestaShop", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prestashop/prestashop-original.svg" },
-  // strapi: { name: "Strapi", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/strapi/strapi-original.svg" },
+ wordpress: { name: "WordPress", icon: "/icons/tech/wordpress/wordpress-plain.svg" },
+ woocommerce: { name: "WooCommerce", icon: "/icons/tech/woocommerce/woocommerce-original.svg" },
+ drupal: { name: "Drupal", icon: "/icons/tech/drupal/drupal-original.svg" },
+ joomla: { name: "Joomla", icon: "/icons/tech/generic.svg" },
+ magento: { name: "Magento", icon: "/icons/tech/magento/magento-original.svg" },
+ shopify: { name: "Shopify", icon: "/icons/tech/generic.svg" },
+ prestashop: { name: "PrestaShop", icon: "/icons/tech/prestashop/prestashop-original.svg" },
+  // strapi: { name: "Strapi", icon: "/icons/tech/generic.svg" },
  sanity: { name: "Sanity", icon: "https://www.sanity.io/favicon.ico" }, // Custom icon
  contentful: { name: "Contentful", icon: "https://www.contentful.com/favicon.ico" }, // Custom icon
- ghost: { name: "Ghost", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ghost/ghost-original.svg" },
+ ghost: { name: "Ghost", icon: "/icons/tech/ghost/ghost-original.svg" },
   
   // ==================== TESTING ====================
- jest: { name: "Jest", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jest/jest-plain.svg" },
+ jest: { name: "Jest", icon: "/icons/tech/jest/jest-plain.svg" },
  vitest: { name: "Vitest", icon: "https://vitest.dev/favicon.ico" }, // Custom icon
- selenium: { name: "Selenium", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/selenium/selenium-original.svg" },
- cypress: { name: "Cypress", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cypressio/cypressio-original.svg" },
+ selenium: { name: "Selenium", icon: "/icons/tech/selenium/selenium-original.svg" },
+ cypress: { name: "Cypress", icon: "/icons/tech/cypressio/cypressio-original.svg" },
  playwright: { name: "Playwright", icon: "https://playwright.dev/favicon.ico" }, // Custom icon
- puppeteer: { name: "Puppeteer", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/puppeteer/puppeteer-original.svg" },
- mocha: { name: "Mocha", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mocha/mocha-plain.svg" },
- chai: { name: "Chai", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/chai/chai-original.svg" },
- jasmine: { name: "Jasmine", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jasmine/jasmine-original.svg" },
- karma: { name: "Karma", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/karma/karma-original.svg" },
- cucumber: { name: "Cucumber", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cucumber/cucumber-plain.svg" },
- junit: { name: "JUnit", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/junit/junit-original.svg" },
- pytest: { name: "Pytest", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytest/pytest-original.svg" },
+ puppeteer: { name: "Puppeteer", icon: "/icons/tech/puppeteer/puppeteer-original.svg" },
+ mocha: { name: "Mocha", icon: "/icons/tech/mocha/mocha-plain.svg" },
+ chai: { name: "Chai", icon: "/icons/tech/generic.svg" },
+ jasmine: { name: "Jasmine", icon: "/icons/tech/jasmine/jasmine-original.svg" },
+ karma: { name: "Karma", icon: "/icons/tech/karma/karma-original.svg" },
+ cucumber: { name: "Cucumber", icon: "/icons/tech/cucumber/cucumber-plain.svg" },
+ junit: { name: "JUnit", icon: "/icons/tech/junit/junit-original.svg" },
+ pytest: { name: "Pytest", icon: "/icons/tech/pytest/pytest-original.svg" },
   
   // ==================== DESIGN TOOLS ====================
- figma: { name: "Figma", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" },
- sketch: { name: "Sketch", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sketch/sketch-original.svg" },
- xd: { name: "Adobe XD", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/xd/xd-plain.svg" },
- photoshop: { name: "Photoshop", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg" },
- illustrator: { name: "Illustrator", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/illustrator/illustrator-plain.svg" },
- indesign: { name: "InDesign", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/indesign/indesign-original.svg" },
- aftereffects: { name: "After Effects", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/aftereffects/aftereffects-original.svg" },
- premiere: { name: "Premiere Pro", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/premierepro/premierepro-plain.svg" },
- lightroom: { name: "Lightroom", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/lightroom/lightroom-original.svg" },
- canva: { name: "Canva", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/canva/canva-original.svg" },
- gimp: { name: "GIMP", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/gimp/gimp-original.svg" },
- inkscape: { name: "Inkscape", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/inkscape/inkscape-original.svg" },
+ figma: { name: "Figma", icon: "/icons/tech/figma/figma-original.svg" },
+ sketch: { name: "Sketch", icon: "/icons/tech/sketch/sketch-original.svg" },
+ xd: { name: "Adobe XD", icon: "/icons/tech/xd/xd-plain.svg" },
+ photoshop: { name: "Photoshop", icon: "/icons/tech/photoshop/photoshop-plain.svg" },
+ illustrator: { name: "Illustrator", icon: "/icons/tech/illustrator/illustrator-plain.svg" },
+ indesign: { name: "InDesign", icon: "/icons/tech/generic.svg" },
+ aftereffects: { name: "After Effects", icon: "/icons/tech/aftereffects/aftereffects-original.svg" },
+ premiere: { name: "Premiere Pro", icon: "/icons/tech/premierepro/premierepro-plain.svg" },
+ lightroom: { name: "Lightroom", icon: "/icons/tech/generic.svg" },
+ canva: { name: "Canva", icon: "/icons/tech/canva/canva-original.svg" },
+ gimp: { name: "GIMP", icon: "/icons/tech/gimp/gimp-original.svg" },
+ inkscape: { name: "Inkscape", icon: "/icons/tech/inkscape/inkscape-original.svg" },
   
   // ==================== BLOCKCHAIN ====================
- solidity: { name: "Solidity", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/solidity/solidity-original.svg" },
-  // rust: { name: "Rust", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg" },
+ solidity: { name: "Solidity", icon: "/icons/tech/solidity/solidity-original.svg" },
+  // rust: { name: "Rust", icon: "/icons/tech/rust/rust-original.svg" },
  web3js: { name: "Web3.js", icon: "https://web3js.org/favicon.ico" }, // Custom icon
  ethers: { name: "Ethers.js", icon: "https://ethers.org/favicon.ico" }, // Custom icon
  hardhat: { name: "Hardhat", icon: "https://hardhat.org/favicon.ico" }, // Custom icon
  truffle: { name: "Truffle", icon: "https://trufflesuite.com/favicon.ico" }, // Custom icon
   
   // ==================== BIG DATA & STREAMING ====================
- spark: { name: "Apache Spark", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apachespark/apachespark-original.svg" },
- kafka: { name: "Apache Kafka", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apachekafka/apachekafka-original.svg" },
- hadoop: { name: "Hadoop", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/hadoop/hadoop-original.svg" },
- airflow: { name: "Airflow", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apacheairflow/apacheairflow-original.svg" },
- flink: { name: "Flink", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apacheflink/apacheflink-original.svg" },
- storm: { name: "Storm", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apachestorm/apachestorm-original.svg" },
- beam: { name: "Beam", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apachebeam/apachebeam-original.svg" },
-  // cassandra: { name: "Cassandra", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cassandra/cassandra-original.svg" },
+ spark: { name: "Apache Spark", icon: "/icons/tech/apachespark/apachespark-original.svg" },
+ kafka: { name: "Apache Kafka", icon: "/icons/tech/apachekafka/apachekafka-original.svg" },
+ hadoop: { name: "Hadoop", icon: "/icons/tech/hadoop/hadoop-original.svg" },
+ airflow: { name: "Airflow", icon: "/icons/tech/apacheairflow/apacheairflow-original.svg" },
+ flink: { name: "Flink", icon: "/icons/tech/generic.svg" },
+ storm: { name: "Storm", icon: "/icons/tech/generic.svg" },
+ beam: { name: "Beam", icon: "/icons/tech/generic.svg" },
+  // cassandra: { name: "Cassandra", icon: "/icons/tech/cassandra/cassandra-original.svg" },
   
   // ==================== MESSAGING & API ====================
- graphql: { name: "GraphQL", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg" },
- rest: { name: "REST API", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/restapi/restapi-original.svg" }, // Custom
+ graphql: { name: "GraphQL", icon: "/icons/tech/graphql/graphql-plain.svg" },
+ rest: { name: "REST API", icon: "/icons/tech/generic.svg" }, // Custom
  grpc: { name: "gRPC", icon: "https://grpc.io/favicon.ico" }, // Custom icon
- websocket: { name: "WebSocket", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/socketio/socketio-original.svg" },
- rabbitmq: { name: "RabbitMQ", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rabbitmq/rabbitmq-original.svg" },
-  // kafka: { name: "Kafka", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apachekafka/apachekafka-original.svg" },
-  // redis: { name: "Redis", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg" },
+ websocket: { name: "WebSocket", icon: "/icons/tech/socketio/socketio-original.svg" },
+ rabbitmq: { name: "RabbitMQ", icon: "/icons/tech/rabbitmq/rabbitmq-original.svg" },
+  // kafka: { name: "Kafka", icon: "/icons/tech/apachekafka/apachekafka-original.svg" },
+  // redis: { name: "Redis", icon: "/icons/tech/redis/redis-original.svg" },
   
   // ==================== 3D, AR & VR ====================
- unity: { name: "Unity", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unity/unity-original.svg" },
- unrealengine: { name: "Unreal Engine", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unrealengine/unrealengine-original.svg" },
- threejs: { name: "Three.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg" },
+ unity: { name: "Unity", icon: "/icons/tech/unity/unity-original.svg" },
+ unrealengine: { name: "Unreal Engine", icon: "/icons/tech/unrealengine/unrealengine-original.svg" },
+ threejs: { name: "Three.js", icon: "/icons/tech/threejs/threejs-original.svg" },
  babylonjs: { name: "Babylon.js", icon: "https://www.babylonjs.com/favicon.ico" }, // Custom icon
- blender: { name: "Blender", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/blender/blender-original.svg" },
- maya: { name: "Maya", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/maya/maya-original.svg" },
+ blender: { name: "Blender", icon: "/icons/tech/blender/blender-original.svg" },
+ maya: { name: "Maya", icon: "/icons/tech/maya/maya-original.svg" },
  arkit: { name: "ARKit", icon: "https://developer.apple.com/favicon.ico" }, // Custom icon
  arcore: { name: "ARCore", icon: "https://developers.google.com/favicon.ico" }, // Custom icon
   
   // ==================== IOT & EMBEDDED ====================
- raspberrypi: { name: "Raspberry Pi", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/raspberrypi/raspberrypi-original.svg" },
- arduino: { name: "Arduino", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/arduino/arduino-original.svg" },
+ raspberrypi: { name: "Raspberry Pi", icon: "/icons/tech/raspberrypi/raspberrypi-original.svg" },
+ arduino: { name: "Arduino", icon: "/icons/tech/arduino/arduino-original.svg" },
  esp32: { name: "ESP32", icon: "https://www.espressif.com/sites/all/themes/espressif/favicon.ico" }, // Custom
  mqtt: { name: "MQTT", icon: "https://mqtt.org/favicon.ico" }, // Custom icon
   
   // ==================== VERSION CONTROL ====================
- git: { name: "Git", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
-  // github: { name: "GitHub", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" },
-  // gitlab: { name: "GitLab", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/gitlab/gitlab-original.svg" },
-  // bitbucket: { name: "Bitbucket", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bitbucket/bitbucket-original.svg" },
- svn: { name: "Subversion", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/subversion/subversion-original.svg" },
- mercurial: { name: "Mercurial", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mercurial/mercurial-original.svg" },
+ git: { name: "Git", icon: "/icons/tech/git/git-original.svg" },
+  // github: { name: "GitHub", icon: "/icons/tech/github/github-original.svg" },
+  // gitlab: { name: "GitLab", icon: "/icons/tech/gitlab/gitlab-original.svg" },
+  // bitbucket: { name: "Bitbucket", icon: "/icons/tech/bitbucket/bitbucket-original.svg" },
+ svn: { name: "Subversion", icon: "/icons/tech/subversion/subversion-original.svg" },
+ mercurial: { name: "Mercurial", icon: "/icons/tech/mercurial/mercurial-original.svg" },
   
   // ==================== MONITORING & OBSERVABILITY ====================
- grafana: { name: "Grafana", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/grafana/grafana-original.svg" },
- prometheus: { name: "Prometheus", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prometheus/prometheus-original.svg" },
- datadog: { name: "Datadog", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/datadog/datadog-original.svg" },
- newrelic: { name: "New Relic", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/newrelic/newrelic-original.svg" },
- sentry: { name: "Sentry", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sentry/sentry-original.svg" },
-  // elasticsearch: { name: "Elasticsearch", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/elasticsearch/elasticsearch-original.svg" },
- logstash: { name: "Logstash", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/logstash/logstash-original.svg" },
- kibana: { name: "Kibana", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kibana/kibana-original.svg" },
- splunk: { name: "Splunk", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/splunk/splunk-original.svg" },
+ grafana: { name: "Grafana", icon: "/icons/tech/grafana/grafana-original.svg" },
+ prometheus: { name: "Prometheus", icon: "/icons/tech/prometheus/prometheus-original.svg" },
+ datadog: { name: "Datadog", icon: "/icons/tech/datadog/datadog-original.svg" },
+ newrelic: { name: "New Relic", icon: "/icons/tech/newrelic/newrelic-original.svg" },
+ sentry: { name: "Sentry", icon: "/icons/tech/sentry/sentry-original.svg" },
+  // elasticsearch: { name: "Elasticsearch", icon: "/icons/tech/elasticsearch/elasticsearch-original.svg" },
+ logstash: { name: "Logstash", icon: "/icons/tech/logstash/logstash-original.svg" },
+ kibana: { name: "Kibana", icon: "/icons/tech/kibana/kibana-original.svg" },
+ splunk: { name: "Splunk", icon: "/icons/tech/splunk/splunk-original.svg" },
   
   // ==================== PACKAGE MANAGERS ====================
- npm: { name: "npm", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/npm/npm-original-wordmark.svg" },
- yarn: { name: "Yarn", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/yarn/yarn-original.svg" },
+ npm: { name: "npm", icon: "/icons/tech/npm/npm-original-wordmark.svg" },
+ yarn: { name: "Yarn", icon: "/icons/tech/yarn/yarn-original.svg" },
  pnpm: { name: "pnpm", icon: "https://pnpm.io/favicon.ico" }, // Custom icon
- pip: { name: "pip", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
+ pip: { name: "pip", icon: "/icons/tech/python/python-original.svg" },
  poetry: { name: "Poetry", icon: "https://python-poetry.org/favicon.ico" }, // Custom icon
- gradle: { name: "Gradle", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/gradle/gradle-original.svg" },
- maven: { name: "Maven", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/maven/maven-original.svg" },
- composer: { name: "Composer", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/composer/composer-original.svg" },
- bundler: { name: "Bundler", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bundler/bundler-original.svg" },
- cargo: { name: "Cargo", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg" },
- go_modules: { name: "Go Modules", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original-wordmark.svg" },
+ gradle: { name: "Gradle", icon: "/icons/tech/gradle/gradle-original.svg" },
+ maven: { name: "Maven", icon: "/icons/tech/maven/maven-original.svg" },
+ composer: { name: "Composer", icon: "/icons/tech/composer/composer-original.svg" },
+ bundler: { name: "Bundler", icon: "/icons/tech/generic.svg" },
+ cargo: { name: "Cargo", icon: "/icons/tech/rust/rust-original.svg" },
+ go_modules: { name: "Go Modules", icon: "/icons/tech/go/go-original-wordmark.svg" },
   
   // ==================== BUILD TOOLS ====================
- webpack: { name: "Webpack", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/webpack/webpack-original.svg" },
- vite: { name: "Vite", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg" },
- rollup: { name: "Rollup", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rollup/rollup-original.svg" },
+ webpack: { name: "Webpack", icon: "/icons/tech/webpack/webpack-original.svg" },
+ vite: { name: "Vite", icon: "/icons/tech/vitejs/vitejs-original.svg" },
+ rollup: { name: "Rollup", icon: "/icons/tech/rollup/rollup-original.svg" },
  esbuild: { name: "esbuild", icon: "https://esbuild.github.io/favicon.ico" }, // Custom icon
- parcel: { name: "Parcel", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/parcel/parcel-original.svg" },
- babel: { name: "Babel", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/babel/babel-original.svg" },
- grunt: { name: "Grunt", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/grunt/grunt-original.svg" },
- gulp: { name: "Gulp", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/gulp/gulp-plain.svg" },
+ parcel: { name: "Parcel", icon: "/icons/tech/generic.svg" },
+ babel: { name: "Babel", icon: "/icons/tech/babel/babel-original.svg" },
+ grunt: { name: "Grunt", icon: "/icons/tech/grunt/grunt-original.svg" },
+ gulp: { name: "Gulp", icon: "/icons/tech/gulp/gulp-plain.svg" },
   
   // ==================== OPERATING SYSTEMS ====================
- linux: { name: "Linux", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" },
- ubuntu: { name: "Ubuntu", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ubuntu/ubuntu-plain.svg" },
- debian: { name: "Debian", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/debian/debian-original.svg" },
- centos: { name: "CentOS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/centos/centos-original.svg" },
- fedora: { name: "Fedora", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fedora/fedora-original.svg" },
- redhat: { name: "Red Hat", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redhat/redhat-original.svg" },
- alpine: { name: "Alpine", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/alpinejs/alpinejs-original.svg" },
- windows: { name: "Windows", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/windows8/windows8-original.svg" },
- macos: { name: "macOS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg" },
- freebsd: { name: "FreeBSD", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/freebsd/freebsd-original.svg" },
+ linux: { name: "Linux", icon: "/icons/tech/linux/linux-original.svg" },
+ ubuntu: { name: "Ubuntu", icon: "/icons/tech/ubuntu/ubuntu-plain.svg" },
+ debian: { name: "Debian", icon: "/icons/tech/debian/debian-original.svg" },
+ centos: { name: "CentOS", icon: "/icons/tech/centos/centos-original.svg" },
+ fedora: { name: "Fedora", icon: "/icons/tech/fedora/fedora-original.svg" },
+ redhat: { name: "Red Hat", icon: "/icons/tech/redhat/redhat-original.svg" },
+ alpine: { name: "Alpine", icon: "/icons/tech/alpinejs/alpinejs-original.svg" },
+ windows: { name: "Windows", icon: "/icons/tech/windows8/windows8-original.svg" },
+ macos: { name: "macOS", icon: "/icons/tech/apple/apple-original.svg" },
+ freebsd: { name: "FreeBSD", icon: "/icons/tech/generic.svg" },
   
   // ==================== AUTHENTICATION & SECURITY ====================
- auth0: { name: "Auth0", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/auth0/auth0-original.svg" },
-  // firebase: { name: "Firebase Auth", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg" },
+ auth0: { name: "Auth0", icon: "/icons/tech/generic.svg" },
+  // firebase: { name: "Firebase Auth", icon: "/icons/tech/firebase/firebase-plain.svg" },
  okta: { name: "Okta", icon: "https://www.okta.com/favicon.ico" }, // Custom icon
  keycloak: { name: "Keycloak", icon: "https://www.keycloak.org/favicon.ico" }, // Custom icon
  jwt: { name: "JWT", icon: "https://jwt.io/img/favicon.png" }, // Custom icon
@@ -18503,7 +18247,7 @@ export const allTechnologies: Record<string, Technology> = {
  passport: { name: "Passport.js", icon: "https://www.passportjs.org/favicon.ico" }, // Custom icon
   
   // ==================== SEARCH ENGINES ====================
-  // elasticsearch: { name: "Elasticsearch", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/elasticsearch/elasticsearch-original.svg" },
+  // elasticsearch: { name: "Elasticsearch", icon: "/icons/tech/elasticsearch/elasticsearch-original.svg" },
  algolia: { name: "Algolia", icon: "https://www.algolia.com/favicon.ico" }, // Custom icon
  meilisearch: { name: "Meilisearch", icon: "https://www.meilisearch.com/favicon.ico" }, // Custom icon
  typesense: { name: "Typesense", icon: "https://typesense.org/favicon.ico" }, // Custom icon

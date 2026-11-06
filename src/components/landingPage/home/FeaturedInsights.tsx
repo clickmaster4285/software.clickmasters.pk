@@ -45,35 +45,25 @@ interface InsightCard {
 
 // ─── Unsplash image generator ─────────────────────────────────────────────────
 
-const getUnsplashImage = (type: string, title: string, index: number): string => {
-  const categories = {
-    tech: ["technology", "computer", "coding", "software", "ai"],
-    business: ["business", "office", "startup", "corporate"],
-    design: ["design", "creative", "ui", "ux"],
-    fintech: ["finance", "banking", "money"],
-    ecommerce: ["shopping", "ecommerce", "retail"],
-  };
+// Self-hosted fallback images (Unsplash License, stored in /public) — no hot-linking (T9).
+const FALLBACK_IMAGES = [
+  "/images/process/photo-1552664730-d307ca884978.webp",
+  "/images/process/photo-1519389950473-47ba0277781c.webp",
+  "/images/process/photo-1522071820081-009f0129c71c.webp",
+  "/images/process/photo-1486312338219-ce68d2c6f44d.webp",
+  "/images/process/photo-1498050108023-c5249f4df085.webp",
+  "/images/process/photo-1531403009284-440f080d1e12.webp",
+  "/images/process/photo-1551288049-bebda4e38f71.webp",
+];
 
-  let selectedCategory = categories.tech;
-  const lowerTitle = title.toLowerCase();
-
-  if (lowerTitle.includes("fin") || lowerTitle.includes("bank")) selectedCategory = categories.fintech;
-  else if (lowerTitle.includes("shop") || lowerTitle.includes("retail")) selectedCategory = categories.ecommerce;
-  else if (lowerTitle.includes("design") || lowerTitle.includes("ui")) selectedCategory = categories.design;
-  else if (lowerTitle.includes("business") || lowerTitle.includes("startup")) selectedCategory = categories.business;
-
-  const keyword = selectedCategory[index % selectedCategory.length];
-  const width = 800;
-  const height = type === "Case Study" && index === 0 ? 1000 : 600;
-
-  return `https://source.unsplash.com/featured/${width}x${height}/?${keyword}&sig=${index}`;
-};
+const getFallbackImage = (_type: string, _title: string, index: number): string =>
+  FALLBACK_IMAGES[index % FALLBACK_IMAGES.length];
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 
 function thumb(raw: string | undefined, type: string, title: string, index: number): string {
   if (raw?.trim()) return resolveImageUrl(raw);
-  return getUnsplashImage(type, title, index);
+  return getFallbackImage(type, title, index);
 }
 
 function blogHref(post: BlogPost): string {
@@ -136,6 +126,8 @@ const InsightCardItem = ({ card, tall = false }: InsightCardItemProps) => {
           <img
             src={imgSrc}
             alt={card.title}
+            width={800}
+            height={tall ? 1000 : 500}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             loading="lazy"
           />

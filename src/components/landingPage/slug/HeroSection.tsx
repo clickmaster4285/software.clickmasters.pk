@@ -213,7 +213,7 @@ export default function HeroSection({ serviceData }: HeroSectionProps) {
     href="/about-us"
     className="px-8 py-3.5 bg-transparent border border-primary/20 rounded-md text-primary font-semibold text-lg hover:bg-primary/10 hover:text-white transition-all duration-300 hover:-translate-y-0.5 text-center"
   >
-    Learn More
+    About ClickMasters
   </Link>
 </div>
 

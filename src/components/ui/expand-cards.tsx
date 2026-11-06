@@ -34,12 +34,12 @@ const ExpandOnHover = ({
 
   // Dark software/tech images with black backgrounds
   const defaultImages = [
-    "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1551033406-611cf9a28f67?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop",
+    "/images/process/photo-1555066931-4365d14bab8c.webp",
+    "/images/process/photo-1542831371-29b0f74f9713.webp",
+    "/images/process/photo-1555949963-ff9fe0c870eb.webp",
+    "/images/process/photo-1551033406-611cf9a28f67.webp",
+    "/images/process/photo-1515879218367-8466d910aaa4.webp",
+    "/images/process/photo-1461749280684-dccba630e2f6.webp",
   ];
 
   const imageArray = customImages || defaultImages;

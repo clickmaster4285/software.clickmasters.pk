@@ -35,12 +35,12 @@ const ExpandOnHover = ({
 
   // Default Images
   const defaultImages = [
-    "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=800&h=600&fit=crop",
+    "/images/process/photo-1498050108023-c5249f4df085.webp",
+    "/images/process/photo-1519389950473-47ba0277781c.webp",
+    "/images/process/photo-1522071820081-009f0129c71c.webp",
+    "/images/process/photo-1522075469751-3a6694fb2f61.webp",
+    "/images/process/photo-1557804506-669a67965ba0.webp",
+    "/images/process/photo-1531403009284-440f080d1e12.webp",
   ];
 
   const imageArray = customImages || defaultImages;

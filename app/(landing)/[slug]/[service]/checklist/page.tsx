@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const checklist = checklists[service];
 
   if (!checklist) {
-    return { title: 'Checklist' };
+    notFound();
   }
 
   return buildPageMetadata({
@@ -31,9 +31,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ChecklistPage({ params }: Props) {
   const { slug, service } = await params;
 
-  if (!checklists[service]) {
+  const checklist = checklists[service];
+  if (!checklist) {
     notFound();
   }
 
-  return <ChecklistPageClient slug={slug} service={service} />;
+  return <ChecklistPageClient slug={slug} service={service} checklist={checklist} />;
 }

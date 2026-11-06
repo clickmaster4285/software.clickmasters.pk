@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { siteConfig, buildPageMetadata, stripBrandSuffix } from '@/app/metadata-config';
 import { getCountryData, getAllCountrySlugs } from '@/lib/country';
-import { servicesByCountry, buildCountryServiceSlugMap } from '@/lib/country-services';
+import Link from 'next/link';
+import { servicesByCountry, buildCountryServiceSlugMap, deriveServiceName } from '@/lib/country-services';
 
 import { ProcessSection } from '@/src/components/landingPage/servicesPage/ProcessSection';
 import FeaturedInsights from '@/src/components/landingPage/home/FeaturedInsights';
@@ -39,9 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { location } = await params;
   const country = getCountryData(location);
 
-  if (!country) {
-    return { title: 'Location Not Found' };
-  }
+  if (!country) notFound();
 
   return buildPageMetadata({
     title: stripBrandSuffix(country.title),
@@ -74,6 +73,12 @@ const serviceData = servicesByCountry[country.name] || [];
   // Map service display names to actual slugs from country-services data
   const serviceSlugMap = buildCountryServiceSlugMap(country.name, location);
 
+  // T2 — every country service page (same data as {country}-services-sitemap.xml)
+  const allCountryServices = serviceData
+    .map((service) => ({ name: deriveServiceName(service), href: `/locations/${location}/${service.slug}` }))
+    .filter((s, i, arr) => arr.findIndex((x) => x.href === s.href) === i)
+    .sort((a, b) => a.name.localeCompare(b.name));
+
   return (
     <div className="min-h-screen w-full overflow-x-clip">
       {/* HERO */}
@@ -95,6 +100,27 @@ const serviceData = servicesByCountry[country.name] || [];
         serviceSlugMap={serviceSlugMap}
       />
 
+
+      {/* All services A–Z: server-rendered links to every country service page (T2) */}
+      {allCountryServices.length > 0 && (
+        <section
+          aria-labelledby="all-country-services-heading"
+          className="mx-auto max-w-[1600px] px-4 py-16 sm:px-6 lg:px-10"
+        >
+          <h2 id="all-country-services-heading" className="text-2xl font-semibold text-slate-900 sm:text-3xl">
+            All software development services in {country.name}
+          </h2>
+          <ul className="mt-8 grid grid-cols-1 gap-x-8 gap-y-2.5 text-[15px] sm:grid-cols-2 lg:grid-cols-4">
+            {allCountryServices.map((s) => (
+              <li key={s.href}>
+                <Link href={s.href} className="text-slate-800 underline-offset-4 hover:text-primary hover:underline">
+                  {s.name} in {country.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {/* OTHER SECTIONS */}
       <TrustedClientsSection />

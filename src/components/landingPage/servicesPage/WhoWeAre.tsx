@@ -3,6 +3,11 @@ import SplitText from "../../ui/SplitText";
 
 interface WhoWeAreProps {
   slug?: string;
+  /**
+   * Page-specific value proposition rendered as the section H2 (T15).
+   * The shared "Who We Are" label is then demoted to a non-heading eyebrow.
+   */
+  heading?: string;
 }
 
 function getServicePrefix(slug?: string) {
@@ -33,7 +38,7 @@ function getServicePrefix(slug?: string) {
   return "professional";
 }
 
-export function WhoWeAre({ slug }: WhoWeAreProps) {
+export function WhoWeAre({ slug, heading }: WhoWeAreProps) {
   const prefix = getServicePrefix(slug);
 
   return (
@@ -44,7 +49,7 @@ export function WhoWeAre({ slug }: WhoWeAreProps) {
           <span className="h-[2px] w-8 rounded-full bg-primary" />
 
           <SplitText
-            as="h2"
+            as={heading ? "p" : "h2"}
             text="Who We Are"
             className="text-2xl md:text-3xl font-bold uppercase tracking-[0.25em] text-primary"
             delay={60}
@@ -58,6 +63,9 @@ export function WhoWeAre({ slug }: WhoWeAreProps) {
 
           <span className="h-[2px] w-8 rounded-full bg-primary" />
         </div>
+        {heading && (
+          <h2 className="mt-2 text-2xl md:text-3xl font-semibold text-slate-900">{heading}</h2>
+        )}
       </div>
 
       {/* Content */}

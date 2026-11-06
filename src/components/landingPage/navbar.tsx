@@ -30,8 +30,22 @@ import { cn } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import { apiFetch } from '@/lib/api';
 import { getCategoryName } from '@/lib/utils';
-import { getServicePath, serviceMenuSections } from '@/lib/service-pages';
-import { getAllServicePages } from '@/lib/service-pages';
+// Lightweight menu data only — never import service-pages/faq here (keeps them out of the client bundle).
+import { getServiceNavPath as getServicePath, serviceMenuSections } from '@/lib/service-nav';
+
+export type NavFaqPreview = {
+  question: string;
+  answer: string;
+  serviceTitle: string;
+  serviceSlug: string;
+};
+
+type NavbarProps = {
+  /** First few FAQs for the Resources mega-menu, computed on the server. */
+  faqPreview?: NavFaqPreview[];
+  /** Total number of FAQs across all services, computed on the server. */
+  faqCount?: number;
+};
 // Types for dropdown data
 interface ProjectItem {
   id: string;
@@ -71,29 +85,29 @@ type ServiceMenuSection = {
 
 // Hire Us dropdown items
 const hireUsItems: { title: string; href: string; icon: LucideIcon }[] = [
-  { title: 'Hire AI Developers', href: '/hire/hire-ai-developers/', icon: Brain },
-  { title: 'AI Agent Development Services', href: '/hire/ai-agent-development-services/', icon: Bot },
-  { title: 'RAG Development Services', href: '/hire/rag-development-services/', icon: Database },
-  { title: 'Custom Software Development', href: '/hire/custom-software-development/', icon: Code2 },
-  { title: 'SaaS Development Services', href: '/hire/saas-development-services/', icon: Cloud },
-  { title: 'AI Development Healthcare', href: '/hire/ai-development-healthcare/', icon: HeartPulse },
-  { title: 'AI Development Finance', href: '/hire/ai-development-finance/', icon: Landmark },
-  { title: 'AI Development Logistics', href: '/hire/ai-development-logistics/', icon: Truck },
+  { title: 'Hire AI Developers', href: '/hire/hire-ai-developers', icon: Brain },
+  { title: 'AI Agent Development Services', href: '/hire/ai-agent-development-services', icon: Bot },
+  { title: 'RAG Development Services', href: '/hire/rag-development-services', icon: Database },
+  { title: 'Custom Software Development', href: '/software-development/custom-software-development', icon: Code2 },
+  { title: 'SaaS Development Services', href: '/hire/saas-development-services', icon: Cloud },
+  { title: 'AI Development Healthcare', href: '/hire/ai-development-healthcare', icon: HeartPulse },
+  { title: 'AI Development Finance', href: '/hire/ai-development-finance', icon: Landmark },
+  { title: 'AI Development Logistics', href: '/hire/ai-development-logistics', icon: Truck },
   {
     title: 'AI Agents for Customer Support',
-    href: '/hire/ai-agents-for-customer-support/',
+    href: '/hire/ai-agents-for-customer-support',
     icon: Headset,
   },
-  { title: 'AI Agents for Sales', href: '/hire/ai-agents-for-sales/', icon: ShoppingCart },
+  { title: 'AI Agents for Sales', href: '/hire/ai-agents-for-sales', icon: ShoppingCart },
   {
     title: 'AI Agents for Lead Qualification',
-    href: '/hire/ai-agents-for-lead-qualification/',
+    href: '/hire/ai-agents-for-lead-qualification',
     icon: UserCheck,
   },
-  { title: 'AI Development Company USA', href: '/hire/ai-development-company-usa/', icon: Building2 },
-  { title: 'AI Development Company UK', href: '/hire/ai-development-company-uk/', icon: Building },
-  { title: 'AI Development Cost', href: '/hire/ai-development-cost/', icon: DollarSign },
-  { title: 'RAG Development Cost', href: '/hire/rag-development-cost/', icon: Calculator },
+  { title: 'AI Development Company USA', href: '/hire/ai-development-company-usa', icon: Building2 },
+  { title: 'AI Development Company UK', href: '/hire/ai-development-company-uk', icon: Building },
+  { title: 'AI Development Cost', href: '/hire/ai-development-cost', icon: DollarSign },
+  { title: 'RAG Development Cost', href: '/hire/rag-development-cost', icon: Calculator },
 ];
 
 // Locations dropdown items
@@ -117,7 +131,7 @@ const mobileServicePageLinks: { title: string; href: string }[] = serviceMenuSec
   }))
 );
 
-export function Navbar() {
+export function Navbar({ faqPreview = [], faqCount = 0 }: NavbarProps = {}) {
   const pathname = usePathname();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -159,16 +173,8 @@ const { data: caseStudies = [] } = useQuery({
   },
 });
   
- // Get FAQs from service pages (not from API)
-const allServicePages = getAllServicePages();
-const allFaqs = allServicePages.flatMap(service => 
-  (service.faqs || []).map(faq => ({
-    ...faq,
-    serviceTitle: service.title,
-    serviceSlug: service.slug,
-    category: service.category
-  }))
-);
+ // FAQ preview is passed in from the server layout (keeps faq.ts out of the client bundle)
+const allFaqs = faqPreview;
 
 
 
@@ -272,8 +278,7 @@ const { data: blogs = [] } = useQuery({
   };
 
   const handleServicesClick = () => {
-    closeDropdowns();
-    router.push('/#');
+    setActiveDropdown((current) => (current === 'services' ? null : 'services'));
   };
 
   const serviceSections: ServiceMenuSection[] = serviceMenuSections.map((section) => ({
@@ -594,7 +599,8 @@ const { data: blogs = [] } = useQuery({
             </button>
             
             {/* Locations Dropdown Menu */}
-            {activeDropdown === 'locations' && !isPageLoading && (
+            {/* Always mounted so the six country hubs are in the server-rendered HTML. */}
+            {(
               <div
                 onMouseEnter={() => {
                   if (hoverTimeoutRef.current) {
@@ -603,10 +609,13 @@ const { data: blogs = [] } = useQuery({
                   }
                 }}
                 onMouseLeave={closeDropdowns}
-                className="absolute left-0 top-full  animate-in fade-in-0 slide-in-from-top-1 duration-150 ease-out z-50 mt-6 -ml-16"
+                className={cn(
+                  "absolute left-0 top-full animate-in fade-in-0 slide-in-from-top-1 duration-150 ease-out z-50 mt-6 -ml-16",
+                  !(activeDropdown === 'locations' && !isPageLoading) && "hidden"
+                )}
               >
                 <div
-                  ref={dropdownRef}
+                  ref={activeDropdown === 'locations' ? dropdownRef : undefined}
                   onMouseLeave={closeDropdowns}
                   className="w-48 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-lg"
                 >
@@ -630,6 +639,13 @@ const { data: blogs = [] } = useQuery({
                         </li>
                       ))}
                     </ul>
+                    <Link
+                      href="/locations"
+                      onClick={closeDropdowns}
+                      className="mt-2 block border-t border-slate-200 px-3 pt-3 text-xs font-semibold uppercase tracking-widest text-gray-900 hover:text-primary"
+                    >
+                      All locations
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -893,7 +909,8 @@ const { data: blogs = [] } = useQuery({
 
       {/* Full-width Dropdown Menu for Services */}
     {/* Full-width Dropdown Menu for Services */}
-{activeDropdown === 'services' && !isPageLoading && (
+{/* Always mounted so every hub + sub-service link is in the server-rendered HTML; hidden via CSS when closed. */}
+{(
   <div
     onMouseEnter={() => {
       if (hoverTimeoutRef.current) {
@@ -902,11 +919,14 @@ const { data: blogs = [] } = useQuery({
       }
     }}
     onMouseLeave={closeDropdowns}
-    className="absolute left-0 right-0 top-full border-t border-black/5 bg-transparent animate-in fade-in-0 slide-in-from-top-1 duration-150 ease-out"
+    className={cn(
+      "absolute left-0 right-0 top-full border-t border-black/5 bg-transparent animate-in fade-in-0 slide-in-from-top-1 duration-150 ease-out",
+      !(activeDropdown === 'services' && !isPageLoading) && "hidden"
+    )}
   >
     <div className="max-w-8xl mx-auto px-5 md:px-8 lg:px-10 py-0">
       <div
-        ref={dropdownRef}
+        ref={activeDropdown === 'services' ? dropdownRef : undefined}
         onMouseLeave={closeDropdowns}
         className="mx-auto max-w-6xl h-[520px] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_18px_50px_-18px_rgba(0,0,0,0.35)]"
       >
@@ -968,7 +988,6 @@ const { data: blogs = [] } = useQuery({
           {/* Right content */}
           <div className="col-span-9 h-full p-8 overflow-y-auto">
             {serviceSections
-              .filter((s) => s.label === activeServiceSection)
               .map((section) => {
                 const categorySlug = section.label
                   .toLowerCase()
@@ -977,7 +996,7 @@ const { data: blogs = [] } = useQuery({
                   .replace(/^-|-$/g, '');
                 
                 return (
-                  <div key={section.label} className="flex h-full flex-col">
+                  <div key={section.label} className={cn("flex h-full flex-col", section.label !== activeServiceSection && "hidden")}>
                     {/* Category header with View All link */}
                     <div className="mb-4 flex items-center justify-between border-b border-slate-200 pb-3">
                       <span className="text-base font-bold text-slate-900">{section.label}</span>
@@ -1064,7 +1083,7 @@ const { data: blogs = [] } = useQuery({
       },
       { 
         title: 'FAQs', 
-        count: allFaqs.length,
+        count: faqCount,
         href: '/faqs'
       },
       { 

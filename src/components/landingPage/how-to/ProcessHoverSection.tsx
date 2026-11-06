@@ -33,12 +33,12 @@ export default function ProcessHoverSection({
   }));
 
 const images = [
-  "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=600&fit=crop", // Dark code editor
-  "https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=800&h=600&fit=crop", // Dark terminal with code
-  "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=800&h=600&fit=crop", // Dark laptop with code
-  "https://images.unsplash.com/photo-1551033406-611cf9a28f67?w=800&h=600&fit=crop", // Dark coding setup
-  "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=800&h=600&fit=crop", // Dark blue code
-  "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop"  // Dark screen with code
+  "/images/process/photo-1555066931-4365d14bab8c.webp", // Dark code editor
+  "/images/process/photo-1542831371-29b0f74f9713.webp", // Dark terminal with code
+  "/images/process/photo-1555949963-ff9fe0c870eb.webp", // Dark laptop with code
+  "/images/process/photo-1551033406-611cf9a28f67.webp", // Dark coding setup
+  "/images/process/photo-1515879218367-8466d910aaa4.webp", // Dark blue code
+  "/images/process/photo-1461749280684-dccba630e2f6.webp"  // Dark screen with code
 ];
 
   return (

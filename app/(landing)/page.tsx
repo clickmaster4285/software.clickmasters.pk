@@ -8,9 +8,7 @@ import { RobotMascot } from '@/components/ui/RobotMascot';
 import {  LucideIcon,} from 'lucide-react';
 import {
   homepageFaqSchema,
-  organizationSchema,
   homepageServiceSchema,
-  webSiteSchema,
   metadataConfig,
 } from '@/app/metadata-config';
 import TrustedBySection from '@/src/components/landingPage/home/TrustedBySection';
@@ -148,10 +146,9 @@ const AppsSection = dynamic(
 export default function LandingPage() {
   return (
     <main className="min-h-screen overflow-x-clip">
-      <SchemaMarkup data={organizationSchema} />
+      {/* Organization + WebSite are emitted once by the root layout (T11). */}
       <SchemaMarkup data={homepageServiceSchema} />
       <SchemaMarkup data={homepageFaqSchema} />
-      <SchemaMarkup data={webSiteSchema} />
 
        <div className="min-h-screen">  <HeroSection /> </div>
        

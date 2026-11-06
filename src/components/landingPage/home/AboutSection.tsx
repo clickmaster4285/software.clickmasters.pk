@@ -15,7 +15,7 @@ const values: GlassCardItem[] = [
     description:
       "Sprint-based delivery with full transparency. Our software developers ship faster, iterate smarter, and keep you in control at every milestone. We follow agile methodologies to ensure continuous improvement, faster feedback loops, and predictable delivery cycles for every project.",
     color: "rgba(156, 163, 175, 0.8)",
-    cta: { label: "Learn more", href: "#" },
+    cta: { label: "Software Development Services", href: "/software-development" },
   },
   {
     id: 2,
@@ -24,7 +24,7 @@ const values: GlassCardItem[] = [
     description:
       "We engineer software solutions on proven stacks React, Node.js, and cloud-native infrastructure built to scale without costly rewrites. Our architecture is designed to handle growth, high traffic, and evolving business needs while maintaining performance and stability.",
     color: "rgba(156, 163, 175, 0.8)",
-    cta: { label: "Learn more", href: "#" },
+    cta: { label: "Microservices Architecture", href: "/software-development/microservices-architecture" },
   },
   {
     id: 3,
@@ -33,7 +33,7 @@ const values: GlassCardItem[] = [
     description:
       "Every product from our software house follows OWASP standards, GDPR best practices, and rigorous QA so your business and users stay protected. We implement multi-layer security, encrypted data handling, and continuous vulnerability testing to ensure maximum protection.",
     color: "rgba(156, 163, 175, 0.8)",
-    cta: { label: "Learn more", href: "#" },
+    cta: { label: "Compliance & Risk Management", href: "/cybersecurity/compliance-risk-management" },
   },
   {
     id: 4,
@@ -42,7 +42,7 @@ const values: GlassCardItem[] = [
     description:
       "Our software development company stays with you post-launch monitoring performance, deploying updates, and resolving issues around the clock. We ensure uninterrupted operations, proactive maintenance, and fast response support whenever you need assistance.",
     color: "rgba(156, 163, 175, 0.8)",
-    cta: { label: "Learn more", href: "#" },
+    cta: { label: "Maintenance & Support", href: "/support-and-outsourcing/maintenance-support" },
   },
 ];
 
@@ -138,11 +138,11 @@ export function AboutSection() {
               we handle everything from discovery and UI/UX design to backend
               development, QA testing, cloud deployment, and long-term maintenance end
               to end, under one roof. Explore our{" "}
-              <a className="text-primary underline-offset-2 hover:underline" href="#">web application development</a>,{" "}
-              <a className="text-primary underline-offset-2 hover:underline" href="#">mobile app development</a>, and{" "}
-              <a className="text-primary underline-offset-2 hover:underline" href="#">custom software development</a>{" "}
+              <Link className="text-primary underline-offset-2 hover:underline" href="/web-development/web-application-development">web application development</Link>,{" "}
+              <Link className="text-primary underline-offset-2 hover:underline" href="/mobile-development/mobile-app-development">mobile app development</Link>, and{" "}
+              <Link className="text-primary underline-offset-2 hover:underline" href="/software-development/custom-software-development">custom software development</Link>{" "}
               services, or browse the{" "}
-              <a className="text-primary underline-offset-2 hover:underline" href="#">software solutions portfolio</a>{" "}
+              <Link className="text-primary underline-offset-2 hover:underline" href="/software-solutions">software solutions portfolio</Link>{" "}
               by industry.
             </p>
 

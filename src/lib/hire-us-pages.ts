@@ -11,7 +11,7 @@ const hireUsItems = [
   'Hire AI Developers',
   'AI Agent Development Services',
   'RAG Development Services',
-  'Custom Software Development',
+  // 'Custom Software Development' — 301 to /software-development/custom-software-development (T7, see next.config.ts)
   'SaaS Development Services',
   'AI Development Healthcare',
   'AI Development Finance',

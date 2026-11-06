@@ -6,57 +6,86 @@ import { Metadata } from 'next';
 
 const BRAND_SUFFIX = ' | ClickMasters';
 const BRAND_SUFFIX_PATTERN = /\s*\|\s*ClickMasters(\s*\|\s*ClickMasters)*\s*$/gi;
-const MAX_SEO_TITLE_LEN = 60;
-const MAX_META_DESC_LEN = 155;
+const GEO_SUFFIX_PATTERN = /\s+(in|for)\s+(Pakistan|USA|UK|Europe|Canada|Worldwide)\b.*$/i;
+const WHITESPACE = /\s+/g;
+const TRAILING_ELLIPSIS = /(\.\.\.|…)$/;
+// Recommended lengths. These are WARNINGS only (T6): titles and descriptions are
+// never cut or suffixed with "…" — the full CMS/page string is always output.
+const RECOMMENDED_SEO_TITLE_LEN = 60;
+const RECOMMENDED_META_DESC_LEN = 155;
 const MIN_META_DESC_LEN = 70;
-const MAX_HEADING_LEN = 70;
+
+function warnLength(kind: string, value: string, max: number) {
+  if (process.env.NODE_ENV !== 'production' && value.length > max) {
+    console.warn(`[seo] ${kind} is ${value.length} chars (recommended ≤ ${max}): "${value}"`);
+  }
+}
 
 export function stripBrandSuffix(title: string): string {
   return title.replace(BRAND_SUFFIX_PATTERN, '').trim();
 }
 
-function truncateAtWord(text: string, maxLen: number): string {
-  if (text.length <= maxLen) return text;
-  const cut = text.slice(0, maxLen - 1).trimEnd();
-  const lastSpace = cut.lastIndexOf(' ');
-  return `${lastSpace > maxLen * 0.55 ? cut.slice(0, lastSpace) : cut}…`;
+/** Normalise whitespace only — headings are no longer truncated. */
+export function truncateHeading(text: string): string {
+  return text.replace(WHITESPACE, ' ').trim();
 }
 
-export function truncateHeading(text: string, maxLen = MAX_HEADING_LEN): string {
-  return truncateAtWord(text.replace(/\s+/g, ' ').trim(), maxLen);
-}
-
-export function formatSeoTitle(title: string): string | { absolute: string } {
-  const stripped = stripBrandSuffix(title);
-  const full = `${stripped}${BRAND_SUFFIX}`;
-  if (full.length <= MAX_SEO_TITLE_LEN) return stripped;
-  return { absolute: truncateAtWord(full, MAX_SEO_TITLE_LEN) };
+/**
+ * Full title with the brand suffix applied exactly once.
+ * Returned as { absolute } so the layout template cannot double-append the brand.
+ */
+export function formatSeoTitle(title: string): { absolute: string } {
+  const stripped = stripBrandSuffix(title.replace(WHITESPACE, ' ').trim()).replace(TRAILING_ELLIPSIS, '').trim();
+  const full = stripped ? `${stripped}${BRAND_SUFFIX}` : 'ClickMasters';
+  warnLength('Title', full, RECOMMENDED_SEO_TITLE_LEN);
+  return { absolute: full };
 }
 
 function resolveSeoTitle(title: string): string {
-  const formatted = formatSeoTitle(title);
-  if (typeof formatted === 'string') return `${formatted}${BRAND_SUFFIX}`;
-  return formatted.absolute;
+  return formatSeoTitle(title).absolute;
 }
 
+/**
+ * Meta description: whitespace-normalised, never truncated (T6).
+ * Very short descriptions are extended with a fallback sentence.
+ */
 export function truncateMetaDescription(text?: string, fallback?: string): string {
-  const raw = (text ?? '').replace(/\s+/g, ' ').trim();
-  let use = raw || fallback || '';
-
-  if (use.length > MAX_META_DESC_LEN) {
-    use = truncateAtWord(use, MAX_META_DESC_LEN);
-  }
+  const raw = (text ?? '').replace(WHITESPACE, ' ').trim();
+  let use = raw || (fallback ?? '').replace(WHITESPACE, ' ').trim();
 
   if (use.length < MIN_META_DESC_LEN) {
-    const extended = truncateMetaDescription(
-      fallback && fallback !== raw
-        ? fallback
-        : `${use} Expert custom software development by ClickMasters.`,
-    );
+    const extended =
+      fallback && fallback.trim() !== raw
+        ? fallback.replace(WHITESPACE, ' ').trim()
+        : `${use} Expert custom software development by ClickMasters.`.trim();
     if (extended.length >= MIN_META_DESC_LEN) use = extended;
   }
 
+  warnLength('Meta description', use, RECOMMENDED_META_DESC_LEN);
   return use;
+}
+
+/**
+ * Pakistan-first service title (T6). Default used until Content supplies a final
+ * title. Picks the longest candidate that still fits ~62 characters including the
+ * brand suffix, e.g. "Custom Software Development Company in Pakistan | ClickMasters".
+ * International angles (USA, Europe, Canada…) belong on the /locations/* pages.
+ */
+export function pakistanFirstServiceTitle(serviceName: string, preferredTitle?: string): string {
+  const MAX_WITH_BRAND = 62;
+  const lead = stripBrandSuffix(preferredTitle ?? '')
+    .split('|')[0]
+    .replace(GEO_SUFFIX_PATTERN, '')
+    .trim();
+  const name = serviceName.trim();
+  const candidates = [
+    lead && /pakistan/i.test(preferredTitle ?? '') ? stripBrandSuffix(preferredTitle!).split('|')[0].trim() : '',
+    lead ? `${lead} in Pakistan` : '',
+    `${name} Company in Pakistan`,
+    `${name} Services in Pakistan`,
+    `${name} in Pakistan`,
+  ].filter(Boolean);
+  return candidates.find((c) => `${c}${BRAND_SUFFIX}`.length <= MAX_WITH_BRAND) ?? `${name} in Pakistan`;
 }
 
 export function withSeoMetadata(meta: Metadata): Metadata {
@@ -118,6 +147,8 @@ export function buildPageMetadata(options: {
   ogImage?: string;
   ogImageAlt?: string;
   robots?: Metadata['robots'];
+  /** hreflang alternates, e.g. { 'en-AE': url, 'x-default': url } */
+  languages?: Record<string, string>;
 }): Metadata {
   const description = truncateMetaDescription(options.description);
   const resolvedTitle = resolveSeoTitle(options.title);
@@ -125,7 +156,10 @@ export function buildPageMetadata(options: {
   return withSeoMetadata({
     title: options.title,
     description,
-    alternates: { canonical: options.canonical },
+    alternates: {
+      canonical: options.canonical,
+      ...(options.languages ? { languages: options.languages } : {}),
+    },
     openGraph: {
       title: resolvedTitle,
       description,
@@ -271,8 +305,8 @@ export const homepageServiceSchema = {
     url: siteConfig.url,
   },
   areaServed: {
-    '@type': 'Place',
-    name: 'Worldwide',
+    '@type': 'Country',
+    name: 'Pakistan',
   },
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
@@ -448,19 +482,72 @@ export function faqSchema(items: { question: string; answer: string }[]) {
   };
 }
 
-/** Service – use on /services or individual service pages */
-export function serviceSchema(name: string, description: string, url: string) {
+/** Service – use on hub, sub-service and location service pages */
+export function serviceSchema(
+  name: string,
+  description: string,
+  url: string,
+  options: { areaServed?: string | string[]; serviceType?: string } = {},
+) {
+  const areas = Array.isArray(options.areaServed)
+    ? options.areaServed
+    : [options.areaServed ?? 'Pakistan'];
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    serviceType: name,
+    '@id': `${url}#service`,
+    name,
+    serviceType: options.serviceType ?? name,
     provider: {
       '@type': 'Organization',
-      name: siteConfig.name,
+      '@id': `${siteConfig.url}/#organization`,
+      name: 'ClickMasters',
       url: siteConfig.url,
     },
+    areaServed: areas.map((area) => ({ '@type': 'Country', name: area })),
     description,
     url,
+  };
+}
+
+/** Person block for the blog/case-study author (same as BlogPosting author). */
+export const authorPersonSchema = {
+  '@type': 'Person',
+  name: 'Amjad Khan',
+  url: `${siteConfig.url}/about-us`,
+  // Add the author's LinkedIn profile here (sameAs) to match the BlogPosting author block.
+};
+
+/** Article – use on case-study detail pages */
+export function articleSchema(opts: {
+  headline: string;
+  description?: string;
+  url: string;
+  image?: string;
+  datePublished?: string;
+  dateModified?: string;
+  about?: string;
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: opts.headline,
+    ...(opts.description ? { description: opts.description } : {}),
+    url: opts.url,
+    mainEntityOfPage: opts.url,
+    ...(opts.image ? { image: toAbsoluteUrl(opts.image) } : {}),
+    ...(opts.datePublished ? { datePublished: opts.datePublished } : {}),
+    ...(opts.dateModified || opts.datePublished
+      ? { dateModified: opts.dateModified ?? opts.datePublished }
+      : {}),
+    author: authorPersonSchema,
+    publisher: {
+      '@type': 'Organization',
+      '@id': `${siteConfig.url}/#organization`,
+      name: 'ClickMasters',
+      logo: { '@type': 'ImageObject', url: `${siteConfig.url}/images/logo-white1.webp` },
+    },
+    ...(opts.about ? { about: { '@type': 'Thing', name: opts.about } } : {}),
   };
 }
 

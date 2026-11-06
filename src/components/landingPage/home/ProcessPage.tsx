@@ -91,44 +91,20 @@ export default function ProcessPage() {
   ];
 
   const allProcessImages = [
-    "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=800&h=600&fit=crop",
+    "/images/process/photo-1552664730-d307ca884978.webp",
+    "/images/process/photo-1519389950473-47ba0277781c.webp",
+    "/images/process/photo-1522071820081-009f0129c71c.webp",
+    "/images/process/photo-1486312338219-ce68d2c6f44d.webp",
+    "/images/process/photo-1498050108023-c5249f4df085.webp",
+    "/images/process/photo-1531403009284-440f080d1e12.webp",
   ];
 
-  // Animated Counter Component
-  const AnimatedCounter = ({ value, suffix, isFloat = false }: { value: number; suffix: string; isFloat?: boolean }) => {
-    const [count, setCount] = useState(0);
-
-    useEffect(() => {
-      if (!metricsInView) return;
-
-      let start = 0;
-      const duration = 1800;
-      const increment = value / (duration / 16);
-
-      const timer = setInterval(() => {
-        start += increment;
-        if (start >= value) {
-          setCount(value);
-          clearInterval(timer);
-        } else {
-          setCount(isFloat ? Math.round(start * 10) / 10 : Math.floor(start));
-        }
-      }, 16);
-
-      return () => clearInterval(timer);
-    }, [value, isFloat, metricsInView]);
-
-    return (
-      <span className="font-bold text-primary">
-        {isFloat ? count.toFixed(1) : Math.floor(count)}{suffix}
-      </span>
-    );
-  };
+  // Static counter (T16): the real value is in the server HTML — no count-up from 0.
+  const AnimatedCounter = ({ value, suffix, isFloat = false }: { value: number; suffix: string; isFloat?: boolean }) => (
+    <span className="font-bold text-primary">
+      {isFloat ? value.toFixed(1) : Math.floor(value)}{suffix}
+    </span>
+  );
 
   return (
     <main className="bg-[#f5fbfb] overflow-x-hidden relative">

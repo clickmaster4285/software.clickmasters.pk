@@ -1,10 +1,15 @@
 import { notFound } from 'next/navigation';
 import { getServiceData, getAllServiceSlugs } from '@/src/lib/services';
-import { metadataConfig, faqSchema, homepageFaqSchema, serviceSchema, siteConfig } from '@/app/metadata-config';
-import ServiceClient from './ServiceClient';
-import Script from 'next/script';
+import { metadataConfig, faqSchema, homepageFaqSchema, serviceSchema, siteConfig, breadcrumbSchema, pakistanFirstServiceTitle } from '@/app/metadata-config';
 
-export const dynamic = 'force-dynamic';
+/** Hub names that read badly as a title on their own (T6). */
+const HUB_TITLE_OVERRIDES: Record<string, string> = {
+  'design-ui-ux': 'UI/UX Design',
+  'data-services': 'Data Analytics & Engineering',
+};
+import ServiceClient from './ServiceClient';
+
+// ISR (revalidate is set in app/layout.tsx). Unknown slugs 404 via notFound() (T5).
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -40,18 +45,15 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
 
-  if (RESERVED_SLUGS.has(slug)) {
-    return { title: 'Page Not Found | ClickMasters', robots: { index: false, follow: false } };
-  }
+  // Throwing notFound() here (before any HTML is streamed) guarantees a real HTTP 404
+  // instead of a soft-404 "Service Not Found" page with HTTP 200.
+  if (RESERVED_SLUGS.has(slug)) notFound();
 
   const serviceData = getServiceData(slug);
-  
-  if (!serviceData) {
-    return { title: 'Service Not Found' };
-  }
+  if (!serviceData) notFound();
 
   return metadataConfig.serviceDetail(
-    serviceData.title,
+    pakistanFirstServiceTitle(HUB_TITLE_OVERRIDES[slug] ?? serviceData.title),
     serviceData.description,
     slug
   );
@@ -73,20 +75,29 @@ export default async function ServicePage({ params }: Props) {
   }
 
   const url = `${siteConfig.url}/${slug}`;
-  const serviceJsonLd = serviceSchema(serviceData.title, serviceData.description, url);
+  const serviceJsonLd = serviceSchema(serviceData.title, serviceData.description, url, { areaServed: 'Pakistan' });
+  const breadcrumbJsonLd = breadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: serviceData.title, url: `/${slug}` },
+  ]);
   const faqJsonLd = faqSchema(categoryFaqs);
 
   return (
     <>
-      <Script
+      <script
         id={`service-schema-${slug}`}
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
       />
-      <Script
+      <script
         id={`faq-schema-${slug}`}
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <script
+        id={`breadcrumb-schema-${slug}`}
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <ServiceClient serviceData={serviceData} />
     </>

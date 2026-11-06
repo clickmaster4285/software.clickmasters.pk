@@ -9,7 +9,20 @@ import '../../../../lib/models/Category';
 import dbConnect from '../../../../lib/mongoose';
 import { resolveImageUrl, getCategoryName } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { breadcrumbSchema, metadataConfig, truncateMetaDescription } from '@/app/metadata-config';
+import { articleSchema, breadcrumbSchema, metadataConfig, siteConfig, truncateMetaDescription } from '@/app/metadata-config';
+
+/** Placeholder / test domains must never be linked as a "live product" (T14). */
+function isRealProductUrl(url?: string): url is string {
+  if (!url) return false;
+  try {
+    const { hostname, protocol } = new URL(url);
+    if (!/^https?:$/.test(protocol)) return false;
+    return !/(^|\.)(example(-[a-z]+)?\.(com|org|net)|localhost|127\.0\.0\.1|test|invalid)$/i.test(hostname)
+      && !/placeholder|lorem/i.test(url);
+  } catch {
+    return false;
+  }
+}
 import { TableOfContents } from '@/components/table-of-contents';
 
 type LeanProject = {
@@ -145,6 +158,8 @@ export default async function CaseStudyDetailPage({
     approach: string;
     results: string;
     project?: LeanProject;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
   };
 
   const project = cs.project;
@@ -155,6 +170,8 @@ export default async function CaseStudyDetailPage({
   const categoryName = project?.category
     ? getCategoryName(project.category as string | { _id: string; name: string })
     : '';
+
+  const headingContext = (cs.client?.trim() || project?.title?.trim() || '').slice(0, 60);
 
   const sections = [
     { id: 'challenge', label: 'Challenge', content: cs.challenge },
@@ -168,8 +185,25 @@ export default async function CaseStudyDetailPage({
     level: 2 as const,
   }));
 
+  const toIso = (d?: Date | string) => (d ? new Date(d).toISOString() : undefined);
+  const caseStudyArticle = articleSchema({
+    headline: cs.title,
+    description: cs.excerpt,
+    url: `${siteConfig.url}/case-studies/${canonicalSlug}`,
+    image: heroImage || undefined,
+    datePublished: toIso(cs.createdAt),
+    dateModified: toIso(cs.updatedAt),
+    about: categoryName || undefined,
+  });
+  const liveProductUrl = isRealProductUrl(project?.url) ? project?.url : undefined;
+
   return (
     <>
+      <script
+        id="case-study-article-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(caseStudyArticle) }}
+      />
       <script
         id="case-study-detail-breadcrumb-schema"
         type="application/ld+json"
@@ -244,9 +278,9 @@ export default async function CaseStudyDetailPage({
               )}
 
               {/* Live product link */}
-              {project?.url && (
+              {liveProductUrl && (
                 <a
-                  href={project.url}
+                  href={liveProductUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-7 inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-[13px] font-semibold text-primary shadow-sm transition hover:border-primary/30 hover:bg-primary/5"
@@ -303,7 +337,8 @@ export default async function CaseStudyDetailPage({
                       {String(i + 1).padStart(2, '0')} {s.label}
                     </p>
                     <h2 className="font-display text-2xl font-normal text-slate-950 sm:text-3xl">
-                      {s.label}
+                      {/* Page-specific H2 (T15): prefix the shared label with the client / project context */}
+                      {s.label}{headingContext ? ` — ${headingContext}` : ''}
                     </h2>
                     <div className="mt-5 whitespace-pre-wrap text-[15px] leading-[1.8] text-slate-900">
                       {s.content}

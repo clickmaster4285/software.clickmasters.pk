@@ -241,6 +241,11 @@ export default function BlogForm({ post, onSubmit, onCancel }: BlogFormProps) {
           placeholder="Post title"
           required
         />
+        {/* T6 — length is a warning, never a hard cut; the full title is published. */}
+        <p className={`text-xs ${title.replace(/\s*\|\s*ClickMasters\s*$/i, '').length + 15 > 60 ? 'text-amber-600' : 'text-muted-foreground'}`}>
+          SEO title: {title.replace(/\s*\|\s*ClickMasters\s*$/i, '').length + 15} / 60 characters incl. &quot; | ClickMasters&quot;
+          {title.replace(/\s*\|\s*ClickMasters\s*$/i, '').length + 15 > 60 ? ' — may be shortened by Google in results' : ''}
+        </p>
       </div>
 
       <div className="space-y-2">
@@ -338,6 +343,10 @@ export default function BlogForm({ post, onSubmit, onCancel }: BlogFormProps) {
           required
           placeholder="Short summary for listing cards"
         />
+        <p className={`text-xs ${excerpt.trim().length > 155 ? 'text-amber-600' : 'text-muted-foreground'}`}>
+          Also used as the meta description: {excerpt.trim().length} / 155 characters
+          {excerpt.trim().length > 155 ? ' — consider shortening' : ''}
+        </p>
       </div>
 
       <div className="space-y-2">

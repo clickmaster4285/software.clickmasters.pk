@@ -227,7 +227,7 @@ export function TrustedClientsSection() {
           </div>
 
           <p className="text-gray-800 max-w-2xl mx-auto text-base md:text-lg">
-            Join 3,500+ businesses that trust ClickMasters to deliver exceptional software solutions
+            Software we build for {trustedClients.length} industries, from healthcare and finance to retail and logistics
           </p>
         </div>
 
@@ -244,7 +244,8 @@ export function TrustedClientsSection() {
             >
               <Image
                 src={c.image}
-                alt=""
+                alt={`${c.industry} software development`}
+                sizes="100vw"
                 fill
                 className="object-cover"
                 priority={i === 0}

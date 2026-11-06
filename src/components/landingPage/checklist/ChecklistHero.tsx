@@ -2,7 +2,8 @@
 
 import { Check } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import { checklists, type Checklist } from '@/src/lib/service_checklist';
+// Type-only: the 1.5 MB checklist dataset stays on the server (T12).
+import type { Checklist } from '@/src/lib/service_checklist';
 import ChecklistMainContent from '@/src/components/landingPage/checklist/ChecklistMainContent';
 import { ChecklistCTAHero } from '@/src/components/landingPage/checklist/ChecklistCTAHero.tsx';
 import { EngineeringBaseline } from '@/src/components/landingPage/servicesPage/EngineeringBaseline';
@@ -214,11 +215,12 @@ const phaseIcons: Record<string, { icon: string; color: string; bg: string }> = 
 export function ChecklistPageClient({
   slug,
   service,
+  checklist,
 }: {
   slug: string;
   service: string;
+  checklist: Checklist;
 }) {
-  const checklist = checklists[service] as Checklist;
   const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
   const [activeTab, setActiveTab] = useState<'all' | string>('all');
 

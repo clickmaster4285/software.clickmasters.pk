@@ -24,7 +24,7 @@ export function generateStaticParams(): { slug: string; service: string }[] {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, service } = await params;
   const guide = howToGuides[service];
-  if (!guide) return { title: 'How-to' };
+  if (!guide) notFound();
   return buildPageMetadata({
     title: guide.title,
     description: `Step-by-step ${guide.title.toLowerCase()} guide from ClickMasters — process, best practices, and expert tips for successful software delivery.`,

@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
-import Script from 'next/script';
 import type { CSSProperties, ReactNode } from 'react';
 import { siteConfig, breadcrumbSchema, faqSchema, serviceSchema, buildPageMetadata, stripBrandSuffix } from '@/app/metadata-config';
 import type { NormalizedGoalPage } from '@/lib/goal-based-utils';
@@ -460,7 +459,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (isPersonaSlug(segment)) {
     const personaRoute = resolvePersonaRoute(segment, serviceParam);
-    if (!personaRoute) return { title: 'Service' };
+    if (!personaRoute) notFound();
 
     const { personaPage, servicePage, canonicalPath } = personaRoute;
     const title = stripBrandSuffix(personaPage.metaTitle ?? personaPage.title ?? 'Service');
@@ -484,9 +483,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const goal = getGoalPage(segment, serviceParam);
-  if (!goal || !goalPageMatchesService(goal, serviceParam)) {
-    return { title: 'Goal' };
-  }
+  if (!goal || !goalPageMatchesService(goal, serviceParam)) notFound();
 
   const servicePage = getServicePage(goal.serviceSlug);
   const title = stripBrandSuffix(goal.metaTitle ?? goal.title ?? 'Service Goal');
@@ -540,7 +537,7 @@ export default async function GoalBasedLandingPage({ params }: PageProps) {
 
     return (
       <>
-        <Script
+        <script
           id={`persona-service-${segment}`}
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -553,17 +550,17 @@ export default async function GoalBasedLandingPage({ params }: PageProps) {
             ),
           }}
         />
-        <Script
+        <script
           id={`persona-professional-${segment}`}
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(professionalServiceLd) }}
         />
-        <Script
+        <script
           id={`persona-faq-${segment}`}
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(personaPage.faqs ?? [])) }}
         />
-        <Script
+        <script
           id={`persona-breadcrumb-${segment}`}
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -623,7 +620,7 @@ export default async function GoalBasedLandingPage({ params }: PageProps) {
 
   return (
     <>
-      <Script
+      <script
         id={`goal-service-${segment}`}
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -636,17 +633,17 @@ export default async function GoalBasedLandingPage({ params }: PageProps) {
           ),
         }}
       />
-      <Script
+      <script
         id={`goal-professional-${segment}`}
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(professionalServiceLd) }}
       />
-      <Script
+      <script
         id={`goal-faq-${segment}`}
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(goal.faqs ?? [])) }}
       />
-      <Script
+      <script
         id={`goal-breadcrumb-${segment}`}
         type="application/ld+json"
         dangerouslySetInnerHTML={{

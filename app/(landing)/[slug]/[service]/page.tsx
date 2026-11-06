@@ -2,10 +2,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
-import Script from 'next/script';
 
 import { TableOfContents } from '@/components/table-of-contents';
-import { breadcrumbSchema, faqSchema, homepageFaqSchema, serviceSchema, siteConfig, buildPageMetadata } from '@/app/metadata-config';
+import { breadcrumbSchema, faqSchema, homepageFaqSchema, serviceSchema, siteConfig, buildPageMetadata, pakistanFirstServiceTitle } from '@/app/metadata-config';
 import {
   getAllServicePages,
   getServicePage,
@@ -35,6 +34,9 @@ import { SectionContent } from '@/src/components/landingPage/servicesPage/Sectio
 import SolutionsPage from '@/src/components/landingPage/home/Solutions';
 import CTASectionImage from '@/src/components/landingPage/home/CTASectionImage';
 import { WhoWeAre } from '@/src/components/landingPage/servicesPage/WhoWeAre';
+import { ServiceResources } from '@/src/components/landingPage/servicesPage/ServiceResources';
+import { getServiceResources } from '@/src/lib/service-resources';
+import { serviceHreflangAlternates } from '@/src/lib/hreflang';
 
 type Props = { params: Promise<{ slug: string; service: string }> };
 
@@ -53,17 +55,22 @@ export function generateStaticParams(): { slug: string; service: string }[] {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, service } = await params;
   const page = getServicePage(service);
-  if (!page || page.categorySlug !== slug) return { title: 'Service' };
+  // Unknown slugs: 404 before streaming starts (T5). A wrong category is redirected by the page.
+  if (!page) notFound();
+  if (page.categorySlug !== slug) return {};
 
   const canonicalPath = getCanonicalPath(page);
   const canonical = `${siteConfig.url}${canonicalPath}`;
 
   return buildPageMetadata({
-    title: page.metaTitle ?? `${page.title} Services`,
+    // Pakistan-first title, full length, never truncated (T6)
+    title: pakistanFirstServiceTitle(page.serviceName, page.metaTitle),
     description: page.metaDescription,
     canonical,
     ogImage: `${siteConfig.url}/og/services.webp`,
     ogImageAlt: `${page.title} ClickMasters software services`,
+    // T2 — reciprocal hreflang to the /locations/* versions; this page is x-default
+    languages: serviceHreflangAlternates(page.slug),
   });
 }
 
@@ -171,29 +178,38 @@ export default async function ServiceByCategoryPage({ params }: Props) {
     tocItems.push({ id: 'faq', title: 'FAQ', level: 2 as const });
   }
 
-  const serviceJsonLd = serviceSchema(page.serviceName, page.metaDescription, url);
-  const faqJsonLd = faqSchema(faqs.length > 0 ? faqs : defaultFaqs);
+  // T3 — links to every programmatic child page (persona, goal, how-to, checklist, FAQ)
+  const resources = getServiceResources(page.categorySlug, page.slug, page.serviceName);
+  tocItems.push({ id: 'resources', title: 'Resources', level: 2 as const });
+
+  const serviceJsonLd = serviceSchema(page.serviceName, page.metaDescription, url, {
+    areaServed: 'Pakistan',
+    serviceType: page.category,
+  });
+  // FAQPage must mirror exactly the questions rendered on the page (T11).
+  const faqJsonLd = faqs.length > 0 ? faqSchema(faqs) : null;
 
   return (
     <>
-      <Script
+      <script
         id={`service-schema-${page.slug}`}
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
       />
-      <Script
-        id={`faq-schema-${page.slug}`}
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
-      <Script
+      {faqJsonLd && (
+        <script
+          id={`faq-schema-${page.slug}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
+      <script
         id={`breadcrumb-${page.slug}`}
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
             breadcrumbSchema([
               { name: 'Home', url: '/' },
-              { name: 'Services', url: '/software-solutions' },
               { name: page.category, url: `/${page.categorySlug}` },
               { name: page.serviceName, url: canonicalPath },
             ])
@@ -221,7 +237,10 @@ export default async function ServiceByCategoryPage({ params }: Props) {
             <div className="min-w-0 w-full py-8 sm:py-10 lg:py-12">
               
 
-    <WhoWeAre slug={slug} />
+    <WhoWeAre
+      slug={slug}
+      heading={page.subheadline ?? `${page.serviceName} for businesses in Pakistan and worldwide`}
+    />
               {/* Section Content */}
               
            <SectionContent sections={sections} serviceName={page.serviceName} />
@@ -342,6 +361,9 @@ export default async function ServiceByCategoryPage({ params }: Props) {
 
               {/* FAQ Section */}
             {faqs.length > 0 && <FAQSection faqs={faqs} />}
+
+              {/* Resources for this service (T3) */}
+              <ServiceResources serviceName={page.serviceName} resources={resources} />
 
               
            

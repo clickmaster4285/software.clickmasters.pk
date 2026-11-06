@@ -9,6 +9,8 @@ import { calculateReadTimeText } from '../../../../src/lib/readTime';
 import { resolveImageUrl } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import BlogToc from '@/components/blog/BlogToc';
+import { RelatedServiceCallout } from '@/components/blog/RelatedServiceCallout';
+import { findServiceForSlug } from '@/lib/service-nav';
 import BlogCta from '@/components/blog/BlogCta'; // Import the Client Component
 import BlogFaqSection from '@/components/blog/BlogFaqSection';
 import BlogRelatedSlider, { type RelatedBlogCard } from '@/components/blog/BlogRelatedSlider';
@@ -255,6 +257,9 @@ export default async function BlogDetailPage({
   const publishedDate = formatDate(post.createdAt);
   const updatedDate = formatDate(post.updatedAt);
 
+  // T7 — link service-topic posts to the matching commercial service page
+  const relatedService = findServiceForSlug(slug);
+
   const currentId = String((raw as { _id?: mongoose.Types.ObjectId })._id ?? '');
   const categoryTrimmed = post.category?.trim() ?? '';
   const relatedPosts =
@@ -375,13 +380,30 @@ export default async function BlogDetailPage({
                 <img
                   src={imageSrc}
                   alt={post.title}
+                  width={1200}
+                  height={630}
+                  fetchPriority="high"
                   className="mb-10 w-full max-h-[420px] rounded-2xl border border-slate-200/90 object-cover shadow-sm"
                 />
+                {relatedService && (
+                  <RelatedServiceCallout
+                    serviceName={relatedService.item.title}
+                    href={relatedService.item.href}
+                    position="top"
+                  />
+                )}
                 <section
                   className="blog-content prose prose-slate max-w-none prose-headings:font-display prose-headings:font-bold prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-headings:text-slate-900 prose-p:text-slate-900 prose-p:leading-8 prose-li:text-slate-900 prose-a:text-primary prose-blockquote:border-l-primary prose-img:rounded-xl prose-img:border prose-img:border-slate-200 prose-img:shadow-sm"
                   dangerouslySetInnerHTML={{ __html: htmlWithIds }}
                 />
                 <BlogFaqSection title={faqSectionHeading} items={faqItems} />
+                {relatedService && (
+                  <RelatedServiceCallout
+                    serviceName={relatedService.item.title}
+                    href={relatedService.item.href}
+                    position="bottom"
+                  />
+                )}
               </div>
 
               {/* Right Column - Sidebar (4 columns) */}

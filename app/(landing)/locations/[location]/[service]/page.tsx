@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
-import Script from 'next/script';
 
 import { TableOfContents } from '@/components/table-of-contents';
 import { breadcrumbSchema, serviceSchema, siteConfig, buildPageMetadata } from '@/app/metadata-config';
+import { baseServiceSlug, serviceHreflangAlternates } from '@/src/lib/hreflang';
 
 import {
   getAllCountryServicePages,
@@ -52,6 +52,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ogImage: `${siteConfig.url}/og/services.webp`,
     ogImageAlt: `${page.title} services by ClickMasters`,
     robots: { index: true, follow: true },
+    // T2 — reciprocal hreflang with the Pakistan default page (x-default)
+    languages: serviceHreflangAlternates(baseServiceSlug(page.slug, location)),
   });
 }
 
@@ -117,7 +119,7 @@ export default async function CountryServicePage({ params }: Props) {
   // ==================== Schema ====================
   const url = `${siteConfig.url}/locations/${page.categorySlug}/${page.slug}`;
 
-  const jsonLd = serviceSchema(page.title, page.metaDescription, url);
+  const jsonLd = serviceSchema(page.title, page.metaDescription, url, { areaServed: page.countryName });
   const professionalServiceSchema = {
     '@context': 'https://schema.org',
     '@type': 'ProfessionalService',
@@ -141,23 +143,23 @@ export default async function CountryServicePage({ params }: Props) {
 
   return (
     <>
-      <Script
+      <script
         id={`schema-${page.slug}`}
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Script
+      <script
         id={`breadcrumb-${page.slug}`}
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema([{ name: 'Home', url: '/' }, { name: 'Services', url: '/software-solutions' }, { name: page.countryName, url: `/locations/${page.categorySlug}` }, { name: page.serviceName, url: `/locations/${page.categorySlug}/${page.slug}` }])) }}
       />
-      <Script
+      <script
         id={`professional-${page.slug}`}
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(professionalServiceSchema) }}
       />
       {faqSchema && (
-        <Script
+        <script
           id={`faq-${page.slug}`}
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { FAQSection } from '@/src/components/landingPage/servicesPage/FAQSection';
 import ChecklistCTAHero from '@/src/components/landingPage/checklist/ChecklistCTAHero';
-import type { ServicePageData } from '@/src/lib/persona-utils';
+import type { ServicePageData } from '@/src/lib/persona-text-utils';
 import {
   cleanText,
   getFeatureSection,
@@ -14,7 +14,7 @@ import {
   getRealPricingRows,
   serviceDisplayName,
   splitBullets,
-} from '@/src/lib/persona-utils';
+} from '@/src/lib/persona-text-utils';
 import { cn } from '@/lib/utils';
 import { ServiceSubpageBreadcrumb } from '@/src/components/landingPage/servicesPage/ServiceSubpageBreadcrumb';
 import { subpageInnerPadding, subpageOuterPadding } from '@/src/components/landingPage/servicesPage/subpage-layout';

@@ -7,6 +7,9 @@ import CaseStudiesClient, { type CaseStudyCard } from './CaseStudiesClient';
 
 export const metadata = metadataConfig.caseStudies();
 
+// Per-request render: never freeze a build-time empty list into the cache (T13).
+export const dynamic = 'force-dynamic';
+
 export default async function CaseStudiesPage() {
   let initialCaseStudies: CaseStudyCard[] = [];
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { Checklist } from '@/src/lib/service_checklist';
+import type { Checklist } from '@/src/lib/service_checklist';
 import Image from 'next/image';
 import { subpageInnerPadding, subpageOuterPadding } from '@/src/components/landingPage/servicesPage/subpage-layout';
 

@@ -6,7 +6,6 @@ import { motion } from 'framer-motion';
 import {
   BookOpen,
   MessageCircle,
-  Video,
   FileQuestion,
   Headphones,
   Search,
@@ -15,6 +14,7 @@ import {
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SplitText from '../../ui/SplitText';
+import { serviceHubs } from '@/lib/service-nav';
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
@@ -24,47 +24,55 @@ interface HelpResource {
   icon: React.ElementType;
   title: string;
   description: string;
+  href: string;
   color?: string;
+  /** Only figures that are evidenced by the linked page (T16). */
   stat?: string;
+  statLabel?: string;
 }
 
-// YOUR ORIGINAL CONTENT - NOT CHANGED
+const totalSubServices = serviceHubs.reduce((sum, hub) => sum + hub.items.length, 0);
+
+// T16 — every figure is backed by, and links to, a page on this site.
+// "Video Tutorials" and "Live Chat" were removed: neither feature exists on the site.
 const helpResources: HelpResource[] = [
   {
-    icon: BookOpen,
-    title: 'Documentation',
-    description: 'Technical documentation and developer guides for our software and APIs.',
-    stat: '150+',
+    icon: FileQuestion,
+    title: 'Service FAQs',
+    description: 'Answers to common questions about pricing, timelines and process for every service we offer.',
+    href: '/faqs',
+    stat: String(totalSubServices),
+    statLabel: 'FAQ pages',
     color: 'from-primary to primary/80',
   },
   {
-    icon: Video,
-    title: 'Video Tutorials',
-    description: 'Step-by-step videos to get started with your software and features.',
-    stat: '200+',
+    icon: BookOpen,
+    title: 'Case Studies',
+    description: 'Real projects we have delivered, with the challenge, our approach and the measured results.',
+    href: '/case-studies',
+    color: 'from-primary to primary/80',
+  },
+  {
+    icon: Search,
+    title: 'Engineering Blog',
+    description: 'Guides on planning, building and running software projects, written by our delivery team.',
+    href: '/blog',
     color: 'from-primary to primary/80',
   },
   {
     icon: MessageCircle,
-    title: 'Live Chat',
-    description:
-      'Chat with our support team in real-time. Get help with development and technical questions.',
-    stat: '24/7',
-    color: 'from-primary to primary/80',
-  },
-  {
-    icon: FileQuestion,
-    title: 'FAQ',
-    description: 'Common questions about our software development services, pricing, and process.',
-    stat: '50+',
+    title: 'Service Catalogue',
+    description: 'Every software development, AI, cloud, data and security service we deliver, by category.',
+    href: '/#services',
+    stat: String(serviceHubs.length),
+    statLabel: 'categories',
     color: 'from-primary to primary/80',
   },
   {
     icon: Headphones,
     title: 'Contact Support',
-    description:
-      'Request a callback or submit a ticket. Our development team responds within 24 hours.',
-    stat: '24h',
+    description: 'Request a callback or send us your project details and our development team will get back to you.',
+    href: '/contact-us',
     color: 'from-primary to primary/80',
   },
 ];
@@ -148,7 +156,7 @@ export function HelpSection() {
           </h2> */}
 
           <p className="mx-auto max-w-2xl text-base leading-7 text-slate-800 sm:text-lg">
-            Documentation, tutorials, and technical support for your software. Need a custom
+            FAQs, case studies, guides and direct support from our team. Need a custom
             solution? Get in touch with our development team.
           </p>
         </div>
@@ -181,14 +189,16 @@ export function HelpSection() {
                     {resource.stat && (
                       <div className="text-right">
                         <p className="text-2xl font-bold text-black group-hover:text-primary transition-colors duration-300">{resource.stat}</p>
-                        <p className="text-xs uppercase tracking-wider text-gray-800">Resources</p>
+                        <p className="text-xs uppercase tracking-wider text-gray-800">{resource.statLabel}</p>
                       </div>
                     )}
                   </div>
 
                   {/* Content */}
                   <h3 className="text-xl font-bold text-primary mb-2 group-hover:text-primary transition-colors duration-300">
-                    {resource.title}
+                    <Link href={resource.href} className="after:absolute after:inset-0">
+                      {resource.title}
+                    </Link>
                   </h3>
 
                   <p className="text-gray-800 text-lg leading-relaxed mb-4">

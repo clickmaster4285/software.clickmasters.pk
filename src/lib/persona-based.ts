@@ -3,39 +3,8 @@
  * Generated: 2026-05-18T17:44:25.621918
  */
 
-export interface ServiceSection {
-  title: string;
-  body: string;
-  bullets?: string[];
-}
-
-export interface PricingTier {
-  engagement: string;
-  investment: string;
-  timeline: string;
-  scope: string;
-}
-
-export interface FAQItem {
-  question: string;
-  answer: string;
-}
-
-export interface ServicePageData {
-  slug: string;
-  metaTitle: string;
-  metaDescription: string;
-  canonical: string;
-  schema: string[];
-  title: string;
-  subtitle: string;
-  topBullets: string[];
-  sections: ServiceSection[];
-  pricing: PricingTier[];
-  faqs: FAQItem[];
-  callToAction: Record<string, string>;
-  internalLinks: Array<Record<string, string>>;
-}
+import type { ServicePageData } from './persona-text-utils';
+export type { ServiceSection, PricingTier, FAQItem, ServicePageData } from './persona-text-utils';
 
 export const servicePages: ServicePageData[] = [
   {

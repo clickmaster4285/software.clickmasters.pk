@@ -7,65 +7,57 @@ import {
 import Link from "next/link";
 import { FaWhatsapp } from "react-icons/fa";
 
+import { serviceHubs } from "@/lib/service-nav";
+
 interface FooterLink {
   label: string;
   href: string;
 }
 
-interface FooterLinks {
-  services: FooterLink[];
-  company: FooterLink[];
-  resources: FooterLink[];
-  legal: FooterLink[];
-}
-
-const footerLinks: FooterLinks = {
-  services: [
-    { label: 'Custom Software', href: '/software-development/custom-software-development' },
-    { label: 'Web Development', href: '/web-development/web-application-development' },
-    { label: 'Mobile App Development', href: '/mobile-development/mobile-app-development' },
-    { label: 'ERP & Business Apps', href: '/software-development/enterprise-software-development' },
-    { label: 'Our Solutions', href: '/software-solutions' },
-  ],
-  company: [
-    { label: 'About Us', href: '/about-us' },
-    { label: 'Contact', href: '/contact-us' },
-    { label: 'Testimonials', href: '/testimonials' },
-    { label: 'Blog', href: '/blog' },
-    { label: 'Support', href: '/#help' },
-  ],
-  resources: [
-    { label: 'Help & FAQ', href: '/contact-us' },
-    { label: 'Why Choose Us', href: '/#community' },
-    { label: 'Case Studies', href: '/case-studies' },
-    { label: 'Blog', href: '/blog' },
-  ],
-  legal: [
-    { label: 'Privacy Policy', href: '/privacy-policy' },
-    { label: 'Terms of Service', href: '/terms-of-service' },
-    { label: 'Cookie Policy', href: '/cookie-policy' },
-  ],
-};
-
-// Footer columns configuration
-const cols = [
-  {
-    title: "Services",
-    links: footerLinks.services.map(item => ({ ...item, name: item.label })),
-  },
-  {
-    title: "Company",
-    links: footerLinks.company.map(item => ({ ...item, name: item.label })),
-  },
-  {
-    title: "Resources",
-    links: footerLinks.resources.map(item => ({ ...item, name: item.label })),
-  },
-  {
-    title: "Legal",
-    links: footerLinks.legal.map(item => ({ ...item, name: item.label })),
-  },
+/** Country hubs — each links to /locations/{country}. */
+export const footerLocations: FooterLink[] = [
+  { label: "UAE", href: "/locations/uae" },
+  { label: "UK", href: "/locations/uk" },
+  { label: "USA", href: "/locations/usa" },
+  { label: "Canada", href: "/locations/canada" },
+  { label: "Germany", href: "/locations/germany" },
+  { label: "Australia", href: "/locations/australia" },
 ];
+
+// Services column is generated from the same data source as the sitemap,
+// so every published hub is linked from every page and the two can never diverge.
+const serviceLinks: FooterLink[] = serviceHubs.map((hub) => ({ label: hub.label, href: hub.href }));
+
+const companyLinks: FooterLink[] = [
+  { label: "About Us", href: "/about-us" },
+  { label: "Contact Us", href: "/contact-us" },
+  { label: "Locations", href: "/locations" },
+  { label: "Careers", href: "/careers" },
+  { label: "Testimonials", href: "/testimonials" },
+];
+
+const resourceLinks: FooterLink[] = [
+  { label: "FAQs", href: "/faqs" },
+  { label: "Case Studies", href: "/case-studies" },
+  { label: "Software Solutions", href: "/software-solutions" },
+  { label: "Blog", href: "/blog" },
+];
+
+function FooterLinkItem({ link }: { link: FooterLink }) {
+  return (
+    <li>
+      <Link
+        href={link.href}
+        className="group inline-flex items-center gap-1.5 transition-all duration-200 hover:text-white"
+      >
+        <span className="inline-block transition-all duration-200 group-hover:translate-x-1">
+          {link.label}
+        </span>
+        <ArrowRight className="h-3 w-3 opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0 -translate-x-1" />
+      </Link>
+    </li>
+  );
+}
 
 export function Footer() {
   return (
@@ -136,29 +128,51 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Columns */}
-        {cols.map((col: any) => (
-          <div key={col.title} data-footer-col>
-            <h2 className="text-lg font-bold uppercase tracking-[0.2em] text-white">
-              {col.title}
-            </h2>
-            <ul className="mt-5 space-y-3 text-sm text-background/75">
-              {col.links.map((link: any) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="group inline-flex items-center gap-1.5 transition-all duration-200 hover:text-white"
-                  >
-                    <span className="inline-block transition-all duration-200 group-hover:translate-x-1 group-hover:scale-105 hover:text-primary/20">
-                      {link.name}
-                    </span>
-                    <ArrowRight className="h-3 w-3 opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0 -translate-x-1" />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+        {/* Services: all hubs */}
+        <nav data-footer-col aria-label="Services" className="lg:col-span-2">
+          <h2 className="text-lg font-bold uppercase tracking-[0.2em] text-white">Services</h2>
+          <ul className="mt-5 grid grid-cols-1 gap-x-6 gap-y-3 text-sm text-background/75 sm:grid-cols-2">
+            {serviceLinks.map((link) => (
+              <FooterLinkItem key={link.href} link={link} />
+            ))}
+          </ul>
+        </nav>
+
+        <nav data-footer-col aria-label="Company">
+          <h2 className="text-lg font-bold uppercase tracking-[0.2em] text-white">Company</h2>
+          <ul className="mt-5 space-y-3 text-sm text-background/75">
+            {companyLinks.map((link) => (
+              <FooterLinkItem key={link.href} link={link} />
+            ))}
+          </ul>
+        </nav>
+
+        <nav data-footer-col aria-label="Resources">
+          <h2 className="text-lg font-bold uppercase tracking-[0.2em] text-white">Resources</h2>
+          <ul className="mt-5 space-y-3 text-sm text-background/75">
+            {resourceLinks.map((link) => (
+              <FooterLinkItem key={link.href} link={link} />
+            ))}
+          </ul>
+        </nav>
+      </div>
+
+      {/* Serving countries strip */}
+      <div className="relative z-10 border-t border-white/10">
+        <nav
+          aria-label="Locations we serve"
+          className="mx-auto flex max-w-[1600px] flex-wrap items-center gap-x-5 gap-y-2 px-10 py-5 text-sm text-background/75"
+        >
+          <span className="font-semibold text-white">Serving clients in:</span>
+          {footerLocations.map((loc) => (
+            <Link key={loc.href} href={loc.href} className="transition hover:text-white">
+              {loc.label}
+            </Link>
+          ))}
+          <Link href="/locations" className="transition hover:text-white underline underline-offset-4">
+            All locations
+          </Link>
+        </nav>
       </div>
 
       {/* Bottom bar */}

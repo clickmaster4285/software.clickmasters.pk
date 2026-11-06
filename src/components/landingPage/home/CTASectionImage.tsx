@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 interface CTAButton {
   text: string;
@@ -50,10 +51,14 @@ export default function CTASectionImage({
             </svg>
           </div>
 
-          <img
-            src="/images/ctaImage.png"
-            alt="Developer working"
-            className="w-full max-w-[420px] object-contain drop-shadow-[0_10px_30px_hsl(var(--primary)/0.16)]"
+          {/* T9 — WebP via next/image (was a 764 KB PNG) */}
+          <Image
+            src="/images/ctaImage.webp"
+            alt="ClickMasters developer working on a software project"
+            width={840}
+            height={765}
+            sizes="(max-width: 640px) 90vw, 420px"
+            className="h-auto w-full max-w-[420px] object-contain drop-shadow-[0_10px_30px_hsl(var(--primary)/0.16)]"
           />
         </div>
 

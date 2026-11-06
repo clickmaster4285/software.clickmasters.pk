@@ -229,6 +229,8 @@ export default function BlogClient({ initialPosts }: BlogClientProps) {
                     <img
                       src={postImage(featured)}
                       alt={featured.title}
+                      width={1200}
+                      height={675}
                       className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = '/placeholder.svg';
@@ -251,6 +253,8 @@ export default function BlogClient({ initialPosts }: BlogClientProps) {
                           <img
                             src={authorImage(featured)}
                             alt={authorName(featured)}
+                            width={20}
+                            height={20}
                             className="h-5 w-5 rounded-full border border-slate-200 object-cover"
                           />
                         ) : null}
@@ -311,6 +315,8 @@ export default function BlogClient({ initialPosts }: BlogClientProps) {
                         <img
                           src={postImage(post)}
                           alt={post.title}
+                          width={800}
+                          height={450}
                           className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
                           onError={(e) => {
                             (e.target as HTMLImageElement).src = '/placeholder.svg';
@@ -364,6 +370,8 @@ export default function BlogClient({ initialPosts }: BlogClientProps) {
                           <img
                             src={postImage(post)}
                             alt={post.title}
+                            width={800}
+                            height={450}
                             className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
                             onError={(e) => {
                               (e.target as HTMLImageElement).src = '/placeholder.svg';

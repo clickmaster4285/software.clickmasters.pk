@@ -7,6 +7,14 @@ const withBundleAnalyzer = bundleAnalyzer({
 
 const nextConfig: NextConfig = {
   htmlLimitedBots: /.*/,
+
+  // T0 — HTML cache lifetime.
+  // Pages export revalidate = 3600 (see app/layout.tsx). Next.js derives the HTML
+  // Cache-Control header from revalidate + expireTime, giving:
+  //   Cache-Control: s-maxage=3600, stale-while-revalidate=86400
+  // (Next.js overrides any Cache-Control set in headers() for pages, so this is the
+  // only reliable place to set it.) /_next/static/* stays immutable for one year.
+  expireTime: 3600 + 86400,
   experimental: {
     optimizePackageImports: ["lucide-react", "framer-motion"],
   },
@@ -22,10 +30,6 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "cdn.jsdelivr.net", // devicons CDN (your main source)
-      },
-      {
-        protocol: "https",
         hostname: "res.cloudinary.com", // uploads / dynamic assets
       },
     ],
@@ -39,6 +43,34 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
+      // T4 — wrong NLP slugs that were linked from /nlp-computer-vision
+      {
+        source: "/nlp-computer-vision/computer-vision-solutions",
+        destination: "/nlp-computer-vision/computer-vision",
+        permanent: true,
+      },
+      {
+        source: "/nlp-computer-vision/natural-language-processing-nlp",
+        destination: "/nlp-computer-vision/natural-language-processing",
+        permanent: true,
+      },
+      {
+        source: "/nlp-computer-vision/speech-recognition-systems",
+        destination: "/nlp-computer-vision/speech-recognition",
+        permanent: true,
+      },
+      // T9 — CTA image moved from PNG to WebP
+      {
+        source: "/images/ctaImage.png",
+        destination: "/images/ctaImage.webp",
+        permanent: true,
+      },
+      // T7 — thin hire page cannibalising the custom software development service page
+      {
+        source: "/hire/custom-software-development",
+        destination: "/software-development/custom-software-development",
+        permanent: true,
+      },
       {
         source: "/services",
         destination: "/software-solutions",

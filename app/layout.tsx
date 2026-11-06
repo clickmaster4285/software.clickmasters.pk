@@ -15,6 +15,11 @@ const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = defaultMetadata;
 
+// T0 — ISR: regenerate every page at most once an hour. Together with expireTime in
+// next.config.ts this emits Cache-Control: s-maxage=3600, stale-while-revalidate=86400
+// (instead of the previous one-year s-maxage on prerendered pages).
+export const revalidate = 3600;
+
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,

@@ -17,9 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const service = getServicePage(slug);
 
   if (!service) {
-    return {
-      title: 'FAQ | ClickMasters',
-    };
+    notFound();
   }
 
   return buildPageMetadata({
@@ -39,9 +37,19 @@ export default async function FaqDetailPage({ params }: Props) {
 
   return (
     <main className="mx-auto mt-24 max-w-4xl px-4 pb-20 sm:px-6 lg:px-8">
-      <Link href="/faqs" className="text-sm font-medium text-primary hover:underline">
-        ← Back to all FAQ cards
-      </Link>
+      <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-1.5 text-sm">
+        <Link href="/" className="font-medium text-gray-800 hover:text-primary">Home</Link>
+        <span aria-hidden className="text-gray-400">/</span>
+        <Link href={`/${service.categorySlug}`} className="font-medium text-gray-800 hover:text-primary">
+          {service.category}
+        </Link>
+        <span aria-hidden className="text-gray-400">/</span>
+        <Link href={`/${service.categorySlug}/${service.slug}`} className="font-medium text-gray-800 hover:text-primary">
+          {service.serviceName}
+        </Link>
+        <span aria-hidden className="text-gray-400">/</span>
+        <span className="font-semibold text-gray-900">FAQs</span>
+      </nav>
 
       <header className="mt-4">
         <p className="text-xs font-semibold uppercase tracking-wide text-primary/80">
@@ -50,6 +58,13 @@ export default async function FaqDetailPage({ params }: Props) {
         <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
           {service.title} FAQs
         </h1>
+        <p className="mt-4 text-[15px] leading-7 text-slate-800">
+          Common questions about our{' '}
+          <Link href={`/${service.categorySlug}/${service.slug}`} className="font-semibold text-primary underline underline-offset-4">
+            {service.serviceName} services
+          </Link>
+          . Browse <Link href="/faqs" className="text-primary underline underline-offset-4">all service FAQs</Link>.
+        </p>
       </header>
 
       <h2 className="sr-only">Frequently asked questions</h2>

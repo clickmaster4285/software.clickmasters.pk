@@ -67,8 +67,8 @@ export default function SolutionsPage() {
         : project.description || "No description available",
     imageSrc: project.thumbnail
       ? resolveImageUrl(project.thumbnail)
-      : "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
-    href: project.url || "#",
+      : "/images/process/photo-1551288049-bebda4e38f71.webp",
+    href: project.url || `/software-solutions/${project._id}`,
   }));
 
   if (isLoading) {

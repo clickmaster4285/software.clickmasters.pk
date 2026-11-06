@@ -47,7 +47,11 @@ function MiniRelatedCard({ post, duplicate }: { post: RelatedBlogCard; duplicate
       <div className="relative h-[62%] w-full shrink-0 overflow-hidden rounded-lg bg-slate-100">
         <img
           src={thumb(post)}
-          alt=""
+          alt={post.title}
+          width={300}
+          height={186}
+          loading="lazy"
+          decoding="async"
           className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.04]"
           onError={(e) => {
             (e.target as HTMLImageElement).src = '/placeholder.svg';

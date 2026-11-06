@@ -182,7 +182,7 @@ export function ServiceCard({ service, slug, idx, countryName, location }: Servi
       {/* Learn More link */}
       <div className="relative mt-5 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
         <span className="relative">
-          Learn More
+          Explore<span className="sr-only"> {service} in {countryName}</span>
           <span className="absolute inset-x-0 -bottom-0.5 h-px origin-left scale-x-0 bg-primary transition-transform duration-300 group-hover:scale-x-100" />
         </span>
         <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

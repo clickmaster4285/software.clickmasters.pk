@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from 'next/link';
-import { getServicePath } from '@/lib/service-pages';
+import { getServiceHub } from '@/lib/service-nav';
 import type { ServiceData } from '@/src/lib/services';
 import {
   Code2, Smartphone, Cloud, Brain, ArrowRight, Glasses,
@@ -122,15 +122,15 @@ const services = [
 
   // Remaining Services — Reusing Same Soft Palette
 
-  // {
-  //   id: "data-and-intelligence",
-  //   icon: serviceIcons["data-and-intelligence"],
-  //   title: "Data & Intelligence",
-  //   desc: "Business intelligence dashboards, analytics, and data-driven decision making.",
-  //   gradient: "linear-gradient(135deg, #fda4af 0%, #fbcfe8 50%, #f9a8d4 100%)",
-  //   accent: "#fef3c7",
-  //   slug: "data-and-intelligence",
-  // },
+  {
+    id: "data-and-intelligence",
+    icon: serviceIcons["data-and-intelligence"],
+    title: "Data & Intelligence",
+    desc: "Business intelligence dashboards, analytics, and data-driven decision making.",
+    gradient: "linear-gradient(135deg, #fda4af 0%, #fbcfe8 50%, #f9a8d4 100%)",
+    accent: "#fef3c7",
+    slug: "data-and-intelligence",
+  },
   {
     id: "automation-and-chatbot",
     icon: serviceIcons["automation-and-chatbot"],
@@ -409,17 +409,20 @@ type ExploreItem = {
 };
 
 function buildExploreItems(serviceData?: ServiceData): ExploreItem[] {
-  if (serviceData?.subServices?.length) {
-    return serviceData.subServices.map((subService, index) => {
+  // Hub pages: render EVERY published sub-service from the shared data source
+  // (same source as sub-services-sitemap.xml) so links always point at real slugs.
+  const hub = serviceData ? getServiceHub(serviceData.slug) : undefined;
+  if (serviceData && hub?.items.length) {
+    return hub.items.map((item, index) => {
       const palette = services[index % services.length];
       return {
-        id: `${serviceData.slug}-${index}`,
-        icon: subServiceIcons[subService.title] || Code2,
-        title: subService.title,
-        desc: subService.description,
+        id: `${hub.slug}-${item.slug}`,
+        icon: subServiceIcons[item.title] || Code2,
+        title: item.title,
+        desc: item.description,
         gradient: palette.gradient,
         accent: palette.accent,
-        href: getServicePath(serviceData.title, subService.title),
+        href: item.href,
       };
     });
   }
@@ -473,8 +476,8 @@ function GridCard({ service, index, total }: { service: ExploreItem; index: numb
   href={href}
   className="mt-auto inline-flex items-center gap-2 text-sm font-semibold text-foreground transition-all group-hover:gap-3 self-start"
 >
-  Learn more
-  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+  Explore <span className="sr-only">{title}</span>
+  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden />
 </Link>
       </div>
     </div>
@@ -509,7 +512,7 @@ function MobileCard({ service }: { service: ExploreItem }) {
           href={href}
           className="inline-flex items-center gap-2 text-sm font-semibold text-foreground mt-4 group-hover:gap-3 transition-all"
         >
-          Learn more <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          Explore <span className="sr-only">{title}</span> <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden />
         </Link>
       </div>
     </div>
@@ -642,7 +645,7 @@ export default function ExploreSection({ serviceData }: { serviceData?: ServiceD
                     href={href}
                     className="mt-5 inline-flex items-center gap-2 text-xl font-semibold text-foreground hover:gap-3 transition-all"
                   >
-                    Learn more <ArrowRight className="h-5 w-5" />
+                    Explore <span className="sr-only">{title}</span> <ArrowRight className="h-5 w-5" aria-hidden />
                   </Link>
                 </div>
               </div>
@@ -672,17 +675,17 @@ export default function ExploreSection({ serviceData }: { serviceData?: ServiceD
           </div>
         )}
 
-        {/* All remaining cards together */}
-        {expanded && (
+        {/* All remaining cards together — always in the HTML so crawlers see every link */}
+        {(
           <>
-            <div className="grid grid-cols-1 gap-6 mt-8">
+            <div className={`grid grid-cols-1 gap-6 mt-8 ${expanded ? "" : "hidden"}`}>
               {exploreItems.slice(4).map((service) => (
                 <MobileCard key={service.id} service={service} />
               ))}
             </div>
 
             {/* See Less at the END */}
-            <div className="flex justify-center mt-12">
+            <div className={`flex justify-center mt-12 ${expanded ? "" : "hidden"}`}>
               <button
                 onClick={() => setExpanded(false)}
                 className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-8 py-3.5 text-sm font-semibold text-background backdrop-blur-md transition hover:bg-white/20 hover:scale-105"
@@ -712,17 +715,17 @@ export default function ExploreSection({ serviceData }: { serviceData?: ServiceD
               </div>
             )}
 
-            {/* Extra Cards + See Less at the bottom */}
-            {expanded && (
+            {/* Extra Cards + See Less at the bottom — always in the HTML, hidden until expanded */}
+            {(
               <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 ${expanded ? "" : "hidden"}`}>
                   {extraServices.map((service, i) => (
                     <GridCard key={service.id} service={service} index={i} total={exploreItems.length} />
                   ))}
                 </div>
 
                 {/* See Less Button at the END */}
-                <div className="flex justify-center mt-16">
+                <div className={`flex justify-center mt-16 ${expanded ? "" : "hidden"}`}>
                   <button
                     onClick={() => setExpanded(false)}
                     className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-8 py-3.5 text-sm font-semibold text-background backdrop-blur-md transition hover:bg-white/20 hover:scale-105"
