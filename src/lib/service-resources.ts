@@ -12,6 +12,7 @@ import { getAllPersonaStaticParams } from './persona-utils';
 import { getAllGoalStaticParams } from './goal-based-utils';
 import { howToGuides } from './how-to';
 import { checklists } from './service_checklist';
+import { getHirePagesForServicePath } from './hire-us-pages';
 
 export type ServiceResourceLink = { href: string; label: string };
 
@@ -19,6 +20,8 @@ export type ServiceResources = {
   personas: ServiceResourceLink[];
   goals: ServiceResourceLink[];
   guides: ServiceResourceLink[];
+  /** /hire/* pages for this service (open item #6) */
+  hire: ServiceResourceLink[];
 };
 
 const PERSONA_LABELS: Record<string, string> = {
@@ -102,5 +105,24 @@ export function getServiceResources(
     personas: children?.personas ?? [],
     goals: children?.goals ?? [],
     guides,
+    hire: getHirePagesForServicePath(`/${categorySlug}/${serviceSlug}`),
   };
+}
+
+/**
+ * Open item #11 — titles for persona and goal pages:
+ *   persona → "{Service} for {Persona}"   e.g. "AI Agents Development for CTOs"
+ *   goal    → "{Service} to {Goal}"       e.g. "AI Agents Development to Increase Revenue"
+ * The brand suffix is appended once by buildPageMetadata.
+ */
+export function personaPageTitle(serviceName: string, personaSlug: string, serviceSlug: string): string {
+  const label = personaLabel(personaSlug, serviceSlug); // "For CTOs"
+  return `${serviceName} ${label.replace(/^For /, 'for ')}`;
+}
+
+export function goalPageTitle(serviceName: string, goalSlug: string): string {
+  const words = goalSlug.split('-').filter(Boolean);
+  const [first, ...rest] = words;
+  const goal = rest.map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  return `${serviceName} ${first ?? ''} ${goal}`.replace(/\s+/g, ' ').trim();
 }

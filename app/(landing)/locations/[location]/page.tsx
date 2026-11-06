@@ -25,6 +25,7 @@ import { PricingSection } from '@/src/components/landingPage/servicesPage/Pricin
 import { TestimonialsSection } from '@/src/components/landingPage/home/TestimonialsSection';
 import TrustedBySection from '@/src/components/landingPage/home/TrustedBySection';
 import { StatsCard } from '@/src/components/landingPage/location/StatsCard';
+import { countryHubHreflangAlternates } from '@/src/lib/hreflang';
 //import WorldMapHero from '@/src/components/landingPage/location/AnimatedPins';
 
 
@@ -47,6 +48,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: country.description,
     canonical: `${siteConfig.url}/locations/${location}`,
     robots: { index: true, follow: true },
+    languages: countryHubHreflangAlternates(),
   });
 }
 

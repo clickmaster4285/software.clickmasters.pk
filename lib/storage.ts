@@ -57,6 +57,7 @@ export interface CaseStudy {
   project: string | Project;
   published: boolean;
   title: string;
+  seoTitle?: string;
   excerpt: string;
   client?: string;
   technologies: string[];

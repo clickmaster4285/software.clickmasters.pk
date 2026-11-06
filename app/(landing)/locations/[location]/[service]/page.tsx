@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 
 import { TableOfContents } from '@/components/table-of-contents';
-import { breadcrumbSchema, serviceSchema, siteConfig, buildPageMetadata } from '@/app/metadata-config';
+import { breadcrumbSchema, serviceSchema, siteConfig, buildPageMetadata, restoreServiceNameCase } from '@/app/metadata-config';
 import { baseServiceSlug, serviceHreflangAlternates } from '@/src/lib/hreflang';
 
 import {
@@ -47,7 +47,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return buildPageMetadata({
     title: page.metaTitle ?? `${page.title} in ${page.countryName}`,
-    description: page.metaDescription,
+    description: restoreServiceNameCase(page.metaDescription, page.serviceName),
     canonical,
     ogImage: `${siteConfig.url}/og/services.webp`,
     ogImageAlt: `${page.title} services by ClickMasters`,
@@ -171,6 +171,7 @@ export default async function CountryServicePage({ params }: Props) {
           page={{
             category: page.countryName,
             categorySlug: page.categorySlug,
+            categoryHref: `/locations/${page.categorySlug}`,
             serviceName: page.serviceName,
             title: page.title,
             lead: page.lead ?? page.metaDescription,

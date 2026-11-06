@@ -69,7 +69,7 @@ export default function GoalIntroSections({
           </div>
 
           <h2 className="mt-5 font-display text-3xl font-bold tracking-tight text-slate-900 sm:text-2xl lg:text-3xl">
-            The ClickMasters Approach
+            {approachIntro?.title ?? "The ClickMasters Approach"}
           </h2>
         </div>
 
@@ -101,7 +101,7 @@ export default function GoalIntroSections({
                   {randomApproachIcon}
                 </div>
 
-                <h2
+                <h3
                   style={{
                     fontFamily: fontHead,
                     fontSize: "clamp(20px, 2.5vw, 28px)",
@@ -111,8 +111,8 @@ export default function GoalIntroSections({
                     lineHeight: 1.25,
                   }}
                 >
-                  {approachIntro.title}
-                </h2>
+                  {approachIntro.eyebrow ?? "The ClickMasters Approach"}
+                </h3>
 
                 {approachIntro.paragraphs.map((paragraph, idx) => (
                   <p

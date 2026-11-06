@@ -25,6 +25,7 @@ export type CaseStudyFormPayload = {
   published: boolean;
   slug: string;
   title: string;
+  seoTitle: string;
   excerpt: string;
   client: string;
   technologies: string[];
@@ -67,6 +68,7 @@ const CaseStudyForm = ({ caseStudy, onSubmit, onCancel }: CaseStudyFormProps) =>
   const [slug, setSlug] = useState(caseStudy?.slug || '');
   const [slugLocked, setSlugLocked] = useState(true);
   const [title, setTitle] = useState(caseStudy?.title || '');
+  const [seoTitle, setSeoTitle] = useState(caseStudy?.seoTitle || '');
   const [excerpt, setExcerpt] = useState(caseStudy?.excerpt || '');
   const [client, setClient] = useState(caseStudy?.client || '');
   const [technologies, setTechnologies] = useState<string[]>(caseStudy?.technologies || []);
@@ -204,6 +206,7 @@ const CaseStudyForm = ({ caseStudy, onSubmit, onCancel }: CaseStudyFormProps) =>
       published,
       slug: slugify(slug),
       title: title.trim(),
+      seoTitle: seoTitle.trim(),
       excerpt: excerpt.trim(),
       client: client.trim(),
       technologies,
@@ -273,6 +276,21 @@ const CaseStudyForm = ({ caseStudy, onSubmit, onCancel }: CaseStudyFormProps) =>
           placeholder="Headline for this study"
           required
         />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="cs-seo-title">SEO title (browser tab and search results)</Label>
+        <Input
+          id="cs-seo-title"
+          value={seoTitle}
+          onChange={(e) => setSeoTitle(e.target.value)}
+          placeholder="e.g. Bar POS Case Study: 45% Faster Service"
+        />
+        {/* " | ClickMasters" (15 chars) is appended automatically; keep the whole title ≤ 60 */}
+        <p className={`text-xs ${seoTitle.trim().length > 45 ? 'text-amber-600' : 'text-muted-foreground'}`}>
+          {seoTitle.trim().length}/45 characters before &quot; | ClickMasters&quot;. The long headline above stays the
+          page H1. Leave empty to use &quot;{client.trim() || 'Client'} Case Study&quot;.
+        </p>
       </div>
 
       <div className="space-y-2">

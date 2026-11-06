@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { siteConfig, buildPageMetadata } from '@/app/metadata-config';
-import { getAllHireUsSlugs, getHireUsPage } from '@/lib/hire-us-pages';
+import { getAllHireUsSlugs, getHireUsPage, getHirePageRelated } from '@/lib/hire-us-pages';
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -13,7 +13,7 @@ export function generateStaticParams(): { slug: string }[] {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const page = getHireUsPage(slug);
-  if (!page) return { title: 'Hire | ClickMasters' };
+  if (!page) notFound();
 
   return buildPageMetadata({
     title: page.title,
@@ -26,6 +26,7 @@ export default async function HireUsPage({ params }: Props) {
   const { slug } = await params;
   const page = getHireUsPage(slug);
   if (!page) notFound();
+  const related = getHirePageRelated(page.slug);
 
   return (
     <main className="mx-auto mt-24 max-w-4xl px-4 pb-20 sm:px-6 lg:px-8">
@@ -34,6 +35,14 @@ export default async function HireUsPage({ params }: Props) {
       </Link>
       <h1 className="mt-6 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">{page.title}</h1>
       <p className="mt-4 text-base text-slate-900">{page.lead}</p>
+      {related && (
+        <p className="mt-4 text-base text-slate-900">
+          Related service:{' '}
+          <Link href={related.href} className="font-semibold text-primary underline underline-offset-4">
+            {related.label}
+          </Link>
+        </p>
+      )}
       <ul className="mt-6 list-disc space-y-2 pl-6 text-slate-900">
         {page.highlights.map((item) => (
           <li key={item}>{item}</li>

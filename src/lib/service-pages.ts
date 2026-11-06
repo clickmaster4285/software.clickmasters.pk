@@ -17844,9 +17844,14 @@ const serviceOverrides = new Map<string, ServicePageContent>([
 
 
 
-const services: ServicePageContent[] = baseServices.map(
- (service) => serviceOverrides.get(service.slug) ?? service
-);
+const services: ServicePageContent[] = baseServices.map((service) => {
+ const page = serviceOverrides.get(service.slug) ?? service;
+ // Some overrides never wired up their FAQ data; fall back to the shared FAQ source so the
+ // page renders its FAQ section (and FAQPage schema) whenever answers exist.
+ if (page.faqs?.length) return page;
+ const fallback = serviceFaqsBySlug[page.slug];
+ return fallback?.length ? { ...page, faqs: fallback } : page;
+});
 
 const bySlug = new Map(services.map((s) => [s.slug, s]));
 

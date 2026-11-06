@@ -97,7 +97,7 @@ export default function BlogClient({ initialPosts }: BlogClientProps) {
   const { data: posts = [], isLoading } = useQuery<BlogCard[]>({
     queryKey: ['blog-posts'],
     queryFn: async () => {
-      const res = await apiFetch('/api/blog');
+      const res = await apiFetch('/api/blog?fields=card');
       if (!res.ok) throw new Error('Failed to load blog posts');
       return res.json();
     },

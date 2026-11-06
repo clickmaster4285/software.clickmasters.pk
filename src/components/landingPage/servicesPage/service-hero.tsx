@@ -115,6 +115,8 @@ interface ServiceHeroProps {
   page: {
     category: string;
     categorySlug: string;
+    /** Parent link override, e.g. /locations/uae for country pages (defaults to /{categorySlug}). */
+    categoryHref?: string;
     serviceName: string;
     title: string;
     lead: string;
@@ -205,7 +207,7 @@ export function ServiceHero({ page }: ServiceHeroProps) {
             </Link>
             <ChevronRight className="h-3.5 w-3.5 text-gray-800" />
             <Link
-              href={`/${page.categorySlug}`}
+              href={page.categoryHref ?? `/${page.categorySlug}`}
               className="text-gray-800 hover:text-primary transition-colors font-medium"
             >
               {page.category}

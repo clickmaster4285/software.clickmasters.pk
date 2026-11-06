@@ -15,6 +15,7 @@ export function ServiceResources({ serviceName, resources }: Props) {
     { title: "Who it's for", links: resources.personas },
     { title: 'Outcomes', links: resources.goals },
     { title: 'Guides', links: resources.guides },
+    { title: 'Hire', links: resources.hire },
   ].filter((group) => group.links.length > 0);
 
   if (groups.length === 0) return null;

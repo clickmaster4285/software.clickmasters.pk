@@ -14,7 +14,8 @@ import { findServiceForSlug } from '@/lib/service-nav';
 import BlogCta from '@/components/blog/BlogCta'; // Import the Client Component
 import BlogFaqSection from '@/components/blog/BlogFaqSection';
 import BlogRelatedSlider, { type RelatedBlogCard } from '@/components/blog/BlogRelatedSlider';
-import { breadcrumbSchema, siteConfig, buildPageMetadata, truncateMetaDescription, stripBrandSuffix, truncateHeading } from '@/app/metadata-config';
+import { breadcrumbSchema, siteConfig, buildPageMetadata, truncateMetaDescription, stripBrandSuffix, truncateHeading, pakistanFirstServiceTitle } from '@/app/metadata-config';
+import { getServicePage } from '@/lib/service-pages';
 
 const BlogPostModel = BlogPost as any;
 
@@ -171,6 +172,20 @@ async function findRelatedByCategory(category: string, excludeId: string): Promi
   return JSON.parse(JSON.stringify(rows)) as RelatedBlogCard[];
 }
 
+/**
+ * Open item #3 — a post must never carry the exact <title> of its matching service page.
+ * Until Content retitles (A) or merges (B) the post in the CMS, a clashing title is reframed
+ * as a guide. A distinct CMS title is used unchanged.
+ */
+function blogTitleWithoutServiceClash(slug: string, title: string): string {
+  const match = findServiceForSlug(slug);
+  const service = match ? getServicePage(match.item.slug) : undefined;
+  if (!service) return title;
+  const serviceTitle = stripBrandSuffix(pakistanFirstServiceTitle(service.serviceName, service.metaTitle));
+  if (serviceTitle.trim().toLowerCase() !== title.trim().toLowerCase()) return title;
+  return `${service.serviceName} in Pakistan: A Practical Guide`;
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -187,10 +202,11 @@ export async function generateMetadata({
   if (!doc && mongoose.Types.ObjectId.isValid(slug)) {
     doc = await BlogPostModel.findOne({ _id: slug, published: true }).select('title excerpt').lean();
   }
-  if (!doc) return { title: 'Blog post' };
+  // Real 404 for unknown posts, decided before any HTML streams (T5).
+  if (!doc) notFound();
 
   const d = doc as { title?: string; excerpt?: string };
-  const title = stripBrandSuffix(d.title ?? 'Blog post');
+  const title = blogTitleWithoutServiceClash(slug, stripBrandSuffix(d.title ?? 'Blog post'));
   const description = toMetaDescription(
     d.excerpt,
     `Software development insights from ClickMasters: ${title}. Custom software, SaaS, and engineering best practices.`,

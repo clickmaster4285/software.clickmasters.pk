@@ -71,6 +71,31 @@ const nextConfig: NextConfig = {
         destination: "/software-development/custom-software-development",
         statusCode: 301, // audit expects 301 (Next uses 308 for permanent: true)
       },
+      // Same three wrong NLP slugs under the old hub slug: one hop, no chain via the hub rule below
+      ...[
+        ["computer-vision-solutions", "computer-vision"],
+        ["natural-language-processing-nlp", "natural-language-processing"],
+        ["speech-recognition-systems", "speech-recognition"],
+      ].map(([from, to]) => ({
+        source: `/nlp-and-computer-vision/${from}`,
+        destination: `/nlp-computer-vision/${to}`,
+        statusCode: 301 as const,
+      })),
+      // Open item #1 — hub slugs the old navigation linked site-wide (and their children)
+      ...[
+        ["nlp-and-computer-vision", "nlp-computer-vision"],
+        ["support-outsourcing", "support-and-outsourcing"],
+        ["testing-qa", "testing-and-qa"],
+      ].flatMap(([from, to]) => [
+        { source: `/${from}`, destination: `/${to}`, statusCode: 301 as const },
+        { source: `/${from}/:path*`, destination: `/${to}/:path*`, statusCode: 301 as const },
+      ]),
+      // Open item #2 — country pages used to link the country name to /{country}
+      ...["uae", "uk", "usa", "canada", "germany", "australia"].map((country) => ({
+        source: `/${country}`,
+        destination: `/locations/${country}`,
+        statusCode: 301 as const,
+      })),
       {
         source: "/services",
         destination: "/software-solutions",

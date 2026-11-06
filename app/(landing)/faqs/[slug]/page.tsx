@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { getAllServiceSlugs, getServicePage } from '@/lib/service-pages';
-import { siteConfig, buildPageMetadata } from '@/app/metadata-config';
+import { siteConfig, buildPageMetadata, breadcrumbSchema, faqSchema } from '@/app/metadata-config';
+import SchemaMarkup from '@/src/components/SchemaMarkup';
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -22,7 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return buildPageMetadata({
     title: `${service.serviceName} FAQs`,
-    description: `Answers to common questions about ${service.serviceName} — pricing, timelines, process, and how ClickMasters delivers ${service.serviceName.toLowerCase()} projects.`,
+    description: `Answers to common questions about ${service.serviceName} — pricing, timelines, process, and how ClickMasters delivers ${service.serviceName} projects.`,
     canonical: `${siteConfig.url}/faqs/${service.slug}`,
   });
 }
@@ -37,6 +38,16 @@ export default async function FaqDetailPage({ params }: Props) {
 
   return (
     <main className="mx-auto mt-24 max-w-4xl px-4 pb-20 sm:px-6 lg:px-8">
+      {/* FAQPage mirrors exactly the Q&A rendered below */}
+      {faqs.length > 0 && <SchemaMarkup data={faqSchema(faqs)} />}
+      <SchemaMarkup
+        data={breadcrumbSchema([
+          { name: 'Home', url: '/' },
+          { name: service.category, url: `/${service.categorySlug}` },
+          { name: service.serviceName, url: `/${service.categorySlug}/${service.slug}` },
+          { name: 'FAQs', url: `/faqs/${service.slug}` },
+        ])}
+      />
       <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-1.5 text-sm">
         <Link href="/" className="font-medium text-gray-800 hover:text-primary">Home</Link>
         <span aria-hidden className="text-gray-400">/</span>
@@ -67,7 +78,7 @@ export default async function FaqDetailPage({ params }: Props) {
         </p>
       </header>
 
-      <h2 className="sr-only">Frequently asked questions</h2>
+      <h2 className="sr-only">Common questions about {service.serviceName}</h2>
 
       {faqs.length === 0 ? (
         <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-6 text-slate-900">

@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import { notFound, redirect } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import type { CSSProperties, ReactNode } from 'react';
-import { siteConfig, breadcrumbSchema, faqSchema, serviceSchema, buildPageMetadata, stripBrandSuffix } from '@/app/metadata-config';
+import { siteConfig, breadcrumbSchema, faqSchema, serviceSchema, buildPageMetadata, stripBrandSuffix, restoreServiceNameCase } from '@/app/metadata-config';
 import type { NormalizedGoalPage } from '@/lib/goal-based-utils';
 import {
   getAllGoalStaticParams,
@@ -17,6 +17,7 @@ import {
   isPersonaSlug,
   resolvePersonaRoute,
 } from '@/src/lib/persona-utils';
+import { personaPageTitle, goalPageTitle } from '@/src/lib/service-resources';
 import { ServiceSubpageBreadcrumb } from '@/src/components/landingPage/servicesPage/ServiceSubpageBreadcrumb';
 
 
@@ -462,13 +463,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     if (!personaRoute) notFound();
 
     const { personaPage, servicePage, canonicalPath } = personaRoute;
-    const title = stripBrandSuffix(personaPage.metaTitle ?? personaPage.title ?? 'Service');
-    const description =
+    // "{Service} for {Persona}" (open item #11)
+    const title = personaPageTitle(servicePage.serviceName, segment, servicePage.slug);
+    const description = restoreServiceNameCase(
       personaPage.metaDescription ??
-      `Explore ${personaPage.title ?? 'this service'} solutions tailored to your business with ClickMasters.`;
+        `Explore ${personaPage.title ?? 'this service'} solutions tailored to your business with ClickMasters.`,
+      servicePage.serviceName,
+    );
 
     if (servicePage.categorySlug !== slug) {
-      notFound();
+      // Wrong hub: redirect to the canonical persona URL instead of a 404
+      permanentRedirect(canonicalPath);
     }
 
     const canonical = `${siteConfig.url}${canonicalPath}`;
@@ -486,14 +491,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!goal || !goalPageMatchesService(goal, serviceParam)) notFound();
 
   const servicePage = getServicePage(goal.serviceSlug);
-  const title = stripBrandSuffix(goal.metaTitle ?? goal.title ?? 'Service Goal');
-  const description =
+  // "{Service} to {Goal}" (open item #11)
+  const title = servicePage
+    ? goalPageTitle(servicePage.serviceName, goal.goalUrlSlug)
+    : stripBrandSuffix(goal.metaTitle ?? goal.title ?? 'Service Goal');
+  const description = restoreServiceNameCase(
     goal.metaDescription ??
-    `Learn how ClickMasters helps teams achieve ${goal.title ?? 'software goals'} with expert custom development.`;
+      `Learn how ClickMasters helps teams achieve ${goal.title ?? 'software goals'} with expert custom development.`,
+    servicePage?.serviceName ?? '',
+  );
 
-  if (!servicePage || servicePage.categorySlug !== slug) {
-    return buildPageMetadata({ title, description, canonical: siteConfig.url });
-  }
+  if (!servicePage) notFound();
+  // Wrong hub: redirect before any HTML is streamed (no duplicate URL).
+  if (servicePage.categorySlug !== slug) permanentRedirect(getGoalCanonicalUrl(goal));
 
   const canonical = `${siteConfig.url}${getGoalCanonicalUrl(goal)}`;
 
@@ -516,7 +526,8 @@ export default async function GoalBasedLandingPage({ params }: PageProps) {
     const { personaPage, servicePage, serviceSlug, canonicalPath } = personaRoute;
 
     if (servicePage.categorySlug !== slug) {
-      notFound();
+      // Wrong hub: redirect to the canonical persona URL instead of a 404
+      permanentRedirect(canonicalPath);
     }
 
     const pageAbsoluteUrl = `${siteConfig.url}${canonicalPath}`;
@@ -594,11 +605,11 @@ export default async function GoalBasedLandingPage({ params }: PageProps) {
   if (!servicePage) notFound();
 
   if (servicePage.categorySlug !== slug) {
-    redirect(`/${servicePage.categorySlug}/${goal.serviceSlug}/${segment}`);
+    permanentRedirect(`/${servicePage.categorySlug}/${goal.serviceSlug}/${segment}`);
   }
 
   if (serviceParam !== goal.serviceSlug && goalPageMatchesService(goal, serviceParam)) {
-    redirect(`/${servicePage.categorySlug}/${goal.serviceSlug}/${segment}`);
+    permanentRedirect(`/${servicePage.categorySlug}/${goal.serviceSlug}/${segment}`);
   }
 
   const parentServiceHref = `/${servicePage.categorySlug}/${servicePage.slug}`;

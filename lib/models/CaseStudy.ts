@@ -11,6 +11,8 @@ const caseStudySchema = new mongoose.Schema(
     slug: { type: String, unique: true, sparse: true, index: true, default: '' },
     published: { type: Boolean, default: false },
     title: { type: String, required: true },
+    /** <title>/og:title (≤ 60 chars incl. " | ClickMasters"); empty falls back to "{client} Case Study". */
+    seoTitle: { type: String, default: '' },
     excerpt: { type: String, required: true },
     client: { type: String, default: '' },
     technologies: { type: [String], default: [] },

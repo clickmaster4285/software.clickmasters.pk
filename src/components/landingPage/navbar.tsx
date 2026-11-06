@@ -193,7 +193,7 @@ const { data: testimonials = [] } = useQuery({
 const { data: blogs = [] } = useQuery({
   queryKey: ['blogs-count'],
   queryFn: async () => {
-    const res = await apiFetch('/api/blog');
+    const res = await apiFetch('/api/blog?fields=card');
     if (!res.ok) throw new Error('Failed to fetch blogs');
     return res.json();
   },
@@ -983,12 +983,15 @@ const { data: blogs = [] } = useQuery({
 
           {/* Right content */}
           <div className="col-span-9 h-full p-8 overflow-y-auto">
+            {/* Open item #15 — only the hub links (left rail) are server-rendered on every page.
+                Sub-service lists render on open; they stay crawlable via the hub pages and footer. */}
             {serviceSections
+              .filter((section) => activeDropdown === 'services' && section.label === activeServiceSection)
               .map((section) => {
                 const categorySlug = categorySlugFromSectionLabel(section.label);
-                
+
                 return (
-                  <div key={section.label} className={cn("flex h-full flex-col", section.label !== activeServiceSection && "hidden")}>
+                  <div key={section.label} className="flex h-full flex-col">
                     {/* Category header with View All link */}
                     <div className="mb-4 flex items-center justify-between border-b border-slate-200 pb-3">
                       <span className="text-base font-bold text-slate-900">{section.label}</span>

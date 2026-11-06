@@ -88,6 +88,54 @@ export function pakistanFirstServiceTitle(serviceName: string, preferredTitle?: 
   return candidates.find((c) => `${c}${BRAND_SUFFIX}`.length <= MAX_WITH_BRAND) ?? `${name} in Pakistan`;
 }
 
+/**
+ * Open item #4 — Pakistan-first meta description for the Pakistan (default) service and hub
+ * pages. The /locations/* pages keep their international copy.
+ *
+ * A description that already names Pakistan near the start is used unchanged (Content
+ * overrides win). Otherwise it is led with "{Service} in Pakistan:", the USA/Europe market
+ * phrases become "worldwide", and whole trailing sentences are dropped (never cut mid-word,
+ * no "…") until it fits the recommended length.
+ */
+const INTL_MARKET_PHRASE =
+  /\s*(?:in|across)\s+(?:the\s+)?USA,\s*Europe(?:,\s*Canada)?(?:\s*(?:&|and)\s*(?:Canada|Australia))?/gi;
+const SERVING_INTL_PHRASE =
+  /Serving\s+(?:the\s+)?USA,\s*Europe(?:,\s*Canada)?(?:\s*(?:&|and)\s*(?:Canada|Australia))?/gi;
+const SENTENCE_SPLIT = /(?<=[.!?])\s+/;
+
+export function pakistanFirstDescription(serviceName: string, description: string): string {
+  const raw = (description ?? '').replace(WHITESPACE, ' ').trim();
+  if (/pakistan/i.test(raw.slice(0, 80))) return raw;
+
+  const neutral = raw
+    .replace(SERVING_INTL_PHRASE, 'Serving Pakistan and clients worldwide')
+    .replace(INTL_MARKET_PHRASE, ' worldwide')
+    .replace(WHITESPACE, ' ')
+    .trim();
+  const sentences = neutral.split(SENTENCE_SPLIT).filter(Boolean);
+  const lead = `${serviceName.trim()} in Pakistan:`;
+
+  const join = (parts: string[]) => `${lead} ${parts.join(' ')}`.trim();
+  // Drop a trailing sentence only while the description stays substantive (≥ 120 chars).
+  while (sentences.length > 1 && join(sentences).length > RECOMMENDED_META_DESC_LEN) {
+    const shorter = join(sentences.slice(0, -1));
+    if (shorter.length < 120) break;
+    sentences.pop();
+  }
+  return join(sentences);
+}
+
+/**
+ * Generated persona / goal / country copy writes the service in lower case
+ * ("ai agents development"); restore the catalogue casing ("AI Agents Development").
+ */
+export function restoreServiceNameCase(text: string, serviceName: string): string {
+  const name = serviceName.trim();
+  if (!text || !name) return text;
+  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return text.replace(new RegExp(`\\b${escaped}\\b`, 'gi'), name);
+}
+
 export function withSeoMetadata(meta: Metadata): Metadata {
   const result: Metadata = { ...meta };
 
@@ -482,6 +530,45 @@ export function faqSchema(items: { question: string; answer: string }[]) {
   };
 }
 
+/** HowTo – use on {service}/how-to guides; steps mirror the rendered step cards */
+export function howToSchema(
+  name: string,
+  url: string,
+  steps: { title: string; body: string }[],
+  description?: string,
+) {
+  const absoluteUrl = toAbsoluteUrl(url);
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name,
+    ...(description ? { description } : {}),
+    url: absoluteUrl,
+    step: steps.map((step, index) => ({
+      '@type': 'HowToStep',
+      position: index + 1,
+      name: step.title,
+      text: step.body,
+    })),
+  };
+}
+
+/** ItemList – use on {service}/checklist pages; one entry per rendered checklist item */
+export function itemListSchema(name: string, url: string, items: string[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name,
+    url: toAbsoluteUrl(url),
+    numberOfItems: items.length,
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item,
+    })),
+  };
+}
+
 /** Service – use on hub, sub-service and location service pages */
 export function serviceSchema(
   name: string,
@@ -738,7 +825,7 @@ export const metadataConfig = {
 
   // ── /about-us ───────────────────────────────────────────────────────────────
   about: (): Metadata => withSeoMetadata({
-    title: 'ClickMasters Software House | The Team Behind 100+ Products',
+    title: 'About Us: Software House in Pakistan',
 
     description:
       '50+ engineers. 100+ products shipped. 10+ years building web apps, mobile apps, SaaS & AI solutions for startups and global enterprises. Meet the team.',
@@ -746,7 +833,7 @@ export const metadataConfig = {
     alternates: { canonical: `${siteConfig.url}/about-us` },
 
     openGraph: {
-      title: 'ClickMasters Software House | The Team Behind 100+ Products',
+      title: 'About Us: Software House in Pakistan',
       description:
         'From a small dev team to 50+ engineers delivering 100+ software products worldwide ClickMasters builds web, mobile, SaaS & AI solutions that scale.',
       url: `${siteConfig.url}/about-us`,
@@ -762,7 +849,7 @@ export const metadataConfig = {
 
     twitter: {
       card: 'summary_large_image',
-      title: 'ClickMasters Software House | The Team Behind 100+ Products',
+      title: 'About Us: Software House in Pakistan',
       description:
         '50+ engineers. 100+ projects. 10+ years. ClickMasters builds scalable digital solutions for startups and global enterprises worldwide.',
       images: [`${siteConfig.url}/og/og-about.jpg`],
@@ -836,7 +923,7 @@ export const metadataConfig = {
 
   // ── /software-solutions ─────────────────────────────────────────────────────
   solutions: (): Metadata => withSeoMetadata({
-    title: "What We've Built | 100+ Scalable Software Systems",
+    title: "Software Solutions We've Built",
 
     description:
       'Explore how ClickMasters builds software for real businesses web platforms, enterprise SaaS, and ERP systems. Browse 100+ production-grade solutions we delivered.',
@@ -844,7 +931,7 @@ export const metadataConfig = {
     alternates: { canonical: `${siteConfig.url}/software-solutions` },
 
     openGraph: {
-      title: "What We've Built | 100+ Scalable Software Systems",
+      title: "Software Solutions We've Built",
       description:
         'Production systems used by real businesses. See how ClickMasters engineers scalable software for fintech, healthcare, retail, and logistics companies.',
       url: `${siteConfig.url}/software-solutions`,
@@ -860,7 +947,7 @@ export const metadataConfig = {
 
     twitter: {
       card: 'summary_large_image',
-      title: "What We've Built | 100+ Scalable Software Systems",
+      title: "Software Solutions We've Built",
       description:
         'Real production software powering fintech, healthcare, retail & logistics built for scale and performance by ClickMasters.',
       images: [`${siteConfig.url}/og/og-solutions.jpg`],
@@ -915,7 +1002,7 @@ export const metadataConfig = {
 
   // ── /case-studies ────────────────────────────────────────────────────────────
   caseStudies: (): Metadata => withSeoMetadata({
-    title: 'How Businesses Turn Ideas Into High-Performance Software',
+    title: 'Software Development Case Studies',
 
     description:
       'Explore real client transformation stories from ClickMasters startups and enterprises turning ideas into powerful web apps, mobile apps, and SaaS platforms.',
@@ -923,7 +1010,7 @@ export const metadataConfig = {
     alternates: { canonical: `${siteConfig.url}/case-studies` },
 
     openGraph: {
-      title: 'How Businesses Turn Ideas Into High-Performance Software',
+      title: 'Software Development Case Studies',
       description:
         'Real engineering stories. See how ClickMasters builds scalable systems powering businesses across the USA, Europe, and Middle East.',
       url: `${siteConfig.url}/case-studies`,
@@ -939,7 +1026,7 @@ export const metadataConfig = {
 
     twitter: {
       card: 'summary_large_image',
-      title: 'How Businesses Turn Ideas Into High-Performance Software',
+      title: 'Software Development Case Studies',
       description:
         'See how real businesses build scalable software with ClickMasters AI, SaaS, and enterprise systems built for growth.',
       images: [`${siteConfig.url}/og/og-case-studies.jpg`],
@@ -961,7 +1048,7 @@ export const metadataConfig = {
 
   // ── /blog ───────────────────────────────────────────────────────────────────
   blog: (): Metadata => withSeoMetadata({
-    title: 'The Hidden Formula Behind Fast-Growing Software Products',
+    title: 'Software Development Blog & Guides',
 
     description:
       'Discover real engineering principles behind successful software systems. Learn how scalable AI platforms, SaaS products, and modern web apps are built for millions of users.',
@@ -969,7 +1056,7 @@ export const metadataConfig = {
     alternates: { canonical: `${siteConfig.url}/blog` },
 
     openGraph: {
-      title: 'The Hidden Formula Behind Fast-Growing Software Products',
+      title: 'Software Development Blog & Guides',
       description:
         'Not trends real engineering. See how production-grade AI systems, SaaS platforms, and scalable applications are designed to survive growth and peak demand.',
       url: `${siteConfig.url}/blog`,
@@ -985,7 +1072,7 @@ export const metadataConfig = {
 
     twitter: {
       card: 'summary_large_image',
-      title: 'The Hidden Formula Behind Fast-Growing Software Products',
+      title: 'Software Development Blog & Guides',
       description:
         'Real engineering behind high-growth SaaS, AI systems, and scalable software built for performance and millions of users.',
       images: [`${siteConfig.url}/og/og-blog.jpg`],
@@ -1027,7 +1114,7 @@ export const metadataConfig = {
 
   // ── /contact-us ─────────────────────────────────────────────────────────────
   contact: (): Metadata => withSeoMetadata({
-    title: 'Turn Your Idea Into Software | Get a Free Expert Consultation',
+    title: 'Contact Us: Free Software Consultation',
 
     description:
       'Have a software idea or project in mind? Talk directly to ClickMasters engineers and get a free, no-obligation consultation. Fast response within 24 hours.',
@@ -1035,7 +1122,7 @@ export const metadataConfig = {
     alternates: { canonical: `${siteConfig.url}/contact-us` },
 
     openGraph: {
-      title: 'Turn Your Idea Into Software | Get a Free Expert Consultation',
+      title: 'Contact Us: Free Software Consultation',
       description:
         'Speak with experienced software engineers and turn your idea into a scalable product. Get a fast, free consultation response within 24 hours.',
       url: `${siteConfig.url}/contact-us`,
@@ -1051,7 +1138,7 @@ export const metadataConfig = {
 
     twitter: {
       card: 'summary_large_image',
-      title: 'Turn Your Idea Into Software | Get a Free Expert Consultation',
+      title: 'Contact Us: Free Software Consultation',
       description:
         'Get a free consultation with software engineers. We build web apps, mobile apps, SaaS & AI products fast response within 24 hours.',
       images: [`${siteConfig.url}/og/og-contact.jpg`],

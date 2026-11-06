@@ -115,14 +115,26 @@ export async function generateMetadata({
   const { slug } = await params;
   const doc = await findCaseStudyBySlugOrId(slug);
 
-  if (!doc) return { title: 'Case study' };
+  // Real 404 for unknown slugs, decided before any HTML streams (T5).
+  if (!doc) notFound();
 
-  const cs = doc as { title?: string; excerpt?: string; slug?: string; _id?: mongoose.Types.ObjectId };
-  const title = cs.title ?? 'Case study';
+  const cs = doc as {
+    title?: string;
+    seoTitle?: string;
+    client?: string;
+    excerpt?: string;
+    slug?: string;
+    _id?: mongoose.Types.ObjectId;
+  };
+  const headline = cs.title ?? 'Case study';
+  // Open item #12 — the narrative headline stays the H1 / Article.headline; <title> and
+  // og:title use the short seoTitle, falling back to "{client} Case Study".
+  const title =
+    cs.seoTitle?.trim() || (cs.client?.trim() ? `${cs.client.trim()} Case Study` : headline);
   const canonicalSlug = getCaseStudyCanonicalSlug(cs);
   const description = toMetaDescription(
     cs.excerpt,
-    `Case study: ${title} custom software delivery by ClickMasters. Web, mobile, SaaS, and enterprise outcomes.`,
+    `Case study: ${headline} custom software delivery by ClickMasters. Web, mobile, SaaS, and enterprise outcomes.`,
   );
 
   return metadataConfig.caseStudyDetail(title, description, canonicalSlug);

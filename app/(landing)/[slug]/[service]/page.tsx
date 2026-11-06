@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
-import { notFound, redirect } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 
 import { TableOfContents } from '@/components/table-of-contents';
-import { breadcrumbSchema, faqSchema, homepageFaqSchema, serviceSchema, siteConfig, buildPageMetadata, pakistanFirstServiceTitle } from '@/app/metadata-config';
+import { breadcrumbSchema, faqSchema, homepageFaqSchema, serviceSchema, siteConfig, buildPageMetadata, pakistanFirstServiceTitle, pakistanFirstDescription } from '@/app/metadata-config';
 import {
   getAllServicePages,
   getServicePage,
@@ -55,9 +55,11 @@ export function generateStaticParams(): { slug: string; service: string }[] {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, service } = await params;
   const page = getServicePage(service);
-  // Unknown slugs: 404 before streaming starts (T5). A wrong category is redirected by the page.
+  // Unknown slugs: 404 before streaming starts (T5).
   if (!page) notFound();
-  if (page.categorySlug !== slug) return {};
+  // A service requested under a hub that is not its parent never renders as a duplicate URL:
+  // redirect to the canonical path before any HTML is sent.
+  if (page.categorySlug !== slug) permanentRedirect(getCanonicalPath(page));
 
   const canonicalPath = getCanonicalPath(page);
   const canonical = `${siteConfig.url}${canonicalPath}`;
@@ -65,7 +67,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildPageMetadata({
     // Pakistan-first title, full length, never truncated (T6)
     title: pakistanFirstServiceTitle(page.serviceName, page.metaTitle),
-    description: page.metaDescription,
+    // Pakistan-first description (open item #4); /locations/* keep the international copy
+    description: pakistanFirstDescription(page.serviceName, page.metaDescription),
     canonical,
     ogImage: `${siteConfig.url}/og/services.webp`,
     ogImageAlt: `${page.title} ClickMasters software services`,
@@ -89,7 +92,7 @@ export default async function ServiceByCategoryPage({ params }: Props) {
 
   // If the category slug doesn't match, redirect to the correct one (canonical URL)
   if (page.categorySlug !== slug) {
-    redirect(`/${page.categorySlug}/${page.slug}`);
+    permanentRedirect(getCanonicalPath(page));
   }       
 
   const sections = page.sections || [];

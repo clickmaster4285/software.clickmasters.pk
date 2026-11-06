@@ -172,9 +172,12 @@ function parseMarketStats(sections: ServiceSection[]): MarketStat[] {
 function findApproachIntro(sections: ServiceSection[]): GoalApproachIntro | undefined {
   const section = sections.find((s) => /ClickMasters Approach/i.test(s.title));
   if (!section) return undefined;
+  // Source titles read "{Service} to {Goal} The ClickMasters Approach"; make the H2 page-specific
+  // instead of the same string on all 300 goal pages (open item #14).
+  const subject = section.title.replace(/[\s:|-]*The ClickMasters Approach\s*$/i, '').trim();
   return {
     eyebrow: 'The ClickMasters Approach',
-    title: 'The ClickMasters Approach',
+    title: subject ? `How ClickMasters Delivers ${subject}` : 'The ClickMasters Approach',
     paragraphs: [section.body],
   };
 }

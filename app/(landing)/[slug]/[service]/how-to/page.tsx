@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { howToGuides, type HowToGuide } from '@/src/lib/how-to';
 import { getAllServicePages, getServicePage } from '@/lib/service-pages';
 import { ServiceSubpageBreadcrumb } from '@/src/components/landingPage/servicesPage/ServiceSubpageBreadcrumb';
 import { subpageInnerPadding, subpageOuterPadding } from '@/src/components/landingPage/servicesPage/subpage-layout';
 import { ChecklistCTAHero } from '@/src/components/landingPage/checklist/ChecklistCTAHero';
-import { siteConfig, buildPageMetadata } from '@/app/metadata-config';
+import { siteConfig, buildPageMetadata, breadcrumbSchema, howToSchema } from '@/app/metadata-config';
+import SchemaMarkup from '@/src/components/SchemaMarkup';
 import WhyChooseUs from '@/src/components/landingPage/home/whyUs';
 import MistakeCard from '@/src/components/landingPage/how-to/mistakeCard';
 import { EngineeringBaseline } from '@/src/components/landingPage/servicesPage/EngineeringBaseline';
@@ -21,13 +22,29 @@ export function generateStaticParams(): { slug: string; service: string }[] {
     .map((p) => ({ slug: p.categorySlug, service: p.slug }));
 }
 
+/**
+ * Resolve guide + parent service; 404 unknown services and redirect a guide requested under
+ * the wrong hub to its canonical path. The generated guide titles read "How to {Service}: …",
+ * so the display title is rebuilt as "How to Plan {Service}: Step-by-Step Guide".
+ */
+function resolveGuide(slug: string, service: string) {
+  const guide = howToGuides[service];
+  const servicePage = getServicePage(service);
+  if (!guide || !servicePage) notFound();
+  if (servicePage.categorySlug !== slug) {
+    permanentRedirect(`/${servicePage.categorySlug}/${servicePage.slug}/how-to`);
+  }
+  const displayTitle = `How to Plan ${servicePage.serviceName}: Step-by-Step Guide`;
+  return { guide: { ...guide, title: displayTitle }, servicePage };
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, service } = await params;
-  const guide = howToGuides[service];
-  if (!guide) notFound();
+  const { servicePage } = resolveGuide(slug, service);
   return buildPageMetadata({
-    title: guide.title,
-    description: `Step-by-step ${guide.title.toLowerCase()} guide from ClickMasters — process, best practices, and expert tips for successful software delivery.`,
+    // Single pass, brand appended once by buildPageMetadata
+    title: `How to Plan ${servicePage.serviceName}: Step-by-Step`,
+    description: `How to plan ${servicePage.serviceName} step by step: scope, build, launch and common mistakes to avoid, from the ClickMasters delivery process.`,
     canonical: `${siteConfig.url}/${slug}/${service}/how-to`,
   });
 }
@@ -78,14 +95,21 @@ function StepCard({ step }: { step: HowToGuide['steps'][number] }) {
 
 export default async function HowToPage({ params }: Props) {
   const { slug, service } = await params;
-  const guide = howToGuides[service];
-  if (!guide) return notFound();
-
-  const serviceName = guide.title.split(':')[0].replace(/^How to\s+/i, '').trim();
-  const servicePage = getServicePage(service);
+  const { guide, servicePage } = resolveGuide(slug, service);
+  const serviceName = servicePage.serviceName;
+  const path = `/${slug}/${service}/how-to`;
 
   return (
     <div className="min-h-screen bg-white text-slate-950">
+      <SchemaMarkup data={howToSchema(guide.title, path, guide.steps)} />
+      <SchemaMarkup
+        data={breadcrumbSchema([
+          { name: 'Home', url: '/' },
+          { name: servicePage.category, url: `/${servicePage.categorySlug}` },
+          { name: serviceName, url: `/${slug}/${service}` },
+          { name: 'How-to', url: path },
+        ])}
+      />
       <ServiceSubpageBreadcrumb
         crumbs={[
           { label: 'Home', href: '/' },

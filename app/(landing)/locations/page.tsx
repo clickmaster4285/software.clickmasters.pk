@@ -2,12 +2,13 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { getAllCountrySlugs, getCountryData } from '@/lib/country';
 import { siteConfig, withSeoMetadata } from '@/app/metadata-config';
+import { countryHubHreflangAlternates } from '@/src/lib/hreflang';
 
 export const metadata: Metadata = withSeoMetadata({
   title: 'Locations',
   description:
     'Explore ClickMasters software development services by country and region — USA, UK, Canada, Australia, UAE, and Germany delivery teams.',
-  alternates: { canonical: `${siteConfig.url}/locations` },
+  alternates: { canonical: `${siteConfig.url}/locations`, languages: countryHubHreflangAlternates() },
 });
 
 export default function LocationsIndexPage() {

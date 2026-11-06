@@ -62,6 +62,7 @@ export async function PUT(
       'published',
       'slug',
       'title',
+      'seoTitle',
       'excerpt',
       'client',
       'technologies',

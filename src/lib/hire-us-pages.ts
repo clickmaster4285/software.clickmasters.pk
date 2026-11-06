@@ -70,3 +70,42 @@ export function getAllHireUsSlugs(): string[] {
 export function getHireUsPage(slug: string): HireUsPageContent | undefined {
   return bySlug.get(slug);
 }
+
+/**
+ * Open item #6 — where each /hire page is linked from (it was orphaned). The value is the
+ * matching sub-service (its "Resources" block links the hire page) or the hub / country page
+ * the hire page links back to. All hire pages are also listed on /about-us ("Hire developers").
+ * If Content decides to merge a page instead, add a 301 in next.config.ts, drop it from
+ * hireUsItems and remove it here.
+ */
+const HIRE_PAGE_RELATED: Record<string, { href: string; label: string }> = {
+  'hire-ai-developers': { href: '/artificial-intelligence-ai/ai-developers', label: 'AI Developers' },
+  'ai-agent-development-services': { href: '/artificial-intelligence-ai/ai-agents-development', label: 'AI Agents Development' },
+  'ai-agents-for-customer-support': { href: '/artificial-intelligence-ai/ai-agents-development', label: 'AI Agents Development' },
+  'ai-agents-for-lead-qualification': { href: '/artificial-intelligence-ai/ai-agents-development', label: 'AI Agents Development' },
+  'ai-agents-for-sales': { href: '/artificial-intelligence-ai/ai-agents-development', label: 'AI Agents Development' },
+  'ai-development-company-uk': { href: '/locations/uk', label: 'Software development in the UK' },
+  'ai-development-company-usa': { href: '/locations/usa', label: 'Software development in the USA' },
+  'ai-development-cost': { href: '/artificial-intelligence-ai', label: 'Artificial Intelligence services' },
+  'ai-development-finance': { href: '/artificial-intelligence-ai', label: 'Artificial Intelligence services' },
+  'ai-development-healthcare': { href: '/artificial-intelligence-ai', label: 'Artificial Intelligence services' },
+  'ai-development-logistics': { href: '/artificial-intelligence-ai', label: 'Artificial Intelligence services' },
+  'rag-development-cost': { href: '/artificial-intelligence-ai/llm-applications-development', label: 'LLM Applications Development' },
+  'rag-development-services': { href: '/artificial-intelligence-ai/llm-applications-development', label: 'LLM Applications Development' },
+  'saas-development-services': { href: '/software-development/saas-product-development', label: 'SaaS Product Development' },
+};
+
+export function getHirePageRelated(hireSlug: string): { href: string; label: string } | undefined {
+  return HIRE_PAGE_RELATED[hireSlug];
+}
+
+/** Hire pages whose related link is the given sub-service path, e.g. "/software-development/saas-product-development". */
+export function getHirePagesForServicePath(servicePath: string): { href: string; label: string }[] {
+  return pages
+    .filter((page) => HIRE_PAGE_RELATED[page.slug]?.href === servicePath)
+    .map((page) => ({ href: `/hire/${page.slug}`, label: page.title }));
+}
+
+export function getAllHireUsPages(): HireUsPageContent[] {
+  return pages;
+}

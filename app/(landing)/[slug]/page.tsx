@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getServiceData, getAllServiceSlugs } from '@/src/lib/services';
-import { metadataConfig, faqSchema, homepageFaqSchema, serviceSchema, siteConfig, breadcrumbSchema, pakistanFirstServiceTitle } from '@/app/metadata-config';
+import { metadataConfig, faqSchema, homepageFaqSchema, serviceSchema, siteConfig, breadcrumbSchema, pakistanFirstServiceTitle, pakistanFirstDescription } from '@/app/metadata-config';
 
 /** Hub names that read badly as a title on their own (T6). */
 const HUB_TITLE_OVERRIDES: Record<string, string> = {
@@ -54,7 +54,8 @@ export async function generateMetadata({ params }: Props) {
 
   return metadataConfig.serviceDetail(
     pakistanFirstServiceTitle(HUB_TITLE_OVERRIDES[slug] ?? serviceData.title),
-    serviceData.description,
+    // Pakistan-first description (open item #4)
+    pakistanFirstDescription(HUB_TITLE_OVERRIDES[slug] ?? serviceData.title, serviceData.description),
     slug
   );
 }

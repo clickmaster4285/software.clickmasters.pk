@@ -63,7 +63,7 @@ export interface CountryData {
 export const countryData: Record<string, CountryData> = {
   canada: {
     name: 'Canada',
-    title: 'ClickMasters Canada Software Developmentn Company',
+    title: 'Software Development Company in Canada',
     description: 'Leading custom software development company in Canada. We build scalable web applications, mobile apps, and AI solutions for Canadian businesses.',
     content: 'ClickMasters is your premier software development partner in Canada. Our team of expert developers specializes in creating custom solutions that drive business growth and digital transformation.',
     servicesByCategory : [
@@ -350,7 +350,7 @@ export const countryData: Record<string, CountryData> = {
   },
   usa: {
     name: 'USA',
-    title: 'ClickMasters USA - Software Development Services',
+    title: 'Software Development Company in the USA',
     description: 'Top-rated software development company in the USA. We deliver cutting-edge web, mobile, and AI solutions for American businesses.',
     content: 'ClickMasters USA provides world-class software development services to businesses across the United States. Our expert team delivers innovative solutions that transform your digital presence.',
         servicesByCategory : [
@@ -637,7 +637,7 @@ export const countryData: Record<string, CountryData> = {
   },
   uk: {
     name: 'UK',
-    title: 'ClickMasters UK - Software Development Company',
+    title: 'Software Development Company in the UK',
     description: 'Leading software development agency in the United Kingdom. Specializing in custom web apps, mobile solutions, and AI development for UK businesses.',
     content: 'ClickMasters UK is your trusted software development partner across the United Kingdom. We deliver high-quality, scalable solutions that help businesses thrive in the digital age.',
        servicesByCategory : [
@@ -924,7 +924,7 @@ export const countryData: Record<string, CountryData> = {
   },
   germany: {
     name: 'Germany',
-    title: 'ClickMasters Germany - Softwareentwicklung',
+    title: 'Software Development Company in Germany',
     description: 'Führendes Softwareentwicklungsunternehmen in Deutschland. Wir maßgeschneiderte Web-Anwendungen, mobile Apps und KI-Lösungen.',
     content: 'ClickMasters Germany ist Ihr bevorzugter Partner für Softwareentwicklung in Deutschland. Unser Expertenteam liefert innovative Lösungen für digitale Transformation.',
        servicesByCategory : [
@@ -1211,7 +1211,7 @@ export const countryData: Record<string, CountryData> = {
   },
   uae: {
     name: 'UAE',
-    title: 'ClickMasters UAE - Software Development Dubai',
+    title: 'Software Development Company in Dubai, UAE',
     description: 'Premier software development company in UAE and Dubai. We create custom web applications, mobile apps, and AI solutions for Middle Eastern businesses.',
     content: 'ClickMasters UAE is your trusted software development partner in the United Arab Emirates. We deliver cutting-edge solutions that drive digital innovation across the Middle East.',
       servicesByCategory : [
@@ -1498,7 +1498,7 @@ export const countryData: Record<string, CountryData> = {
   },
   australia: {
     name: 'Australia',
-    title: 'ClickMasters Australia - Software Development Services',
+    title: 'Software Development Company in Australia',
     description: 'Top software development company in Australia. We build custom web applications, mobile apps, and AI solutions for Australian businesses.',
     content: 'ClickMasters Australia is your premier software development partner Down Under. Our expert team delivers innovative solutions that help businesses succeed in the digital landscape.',
        servicesByCategory : [

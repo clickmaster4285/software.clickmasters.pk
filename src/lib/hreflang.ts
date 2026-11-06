@@ -9,7 +9,10 @@
 import { getCountryServicePage } from './country-services';
 import { getServicePage } from './service-pages';
 
-const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://software.clickmasters.pk';
+import { siteConfig } from '@/app/metadata-config';
+
+// Same origin as canonical URLs, so hreflang and canonical can never disagree.
+const SITE_URL = siteConfig.url;
 
 /** Country slug -> BCP 47 language-region code (content is English everywhere). */
 export const COUNTRY_HREFLANG: Record<string, string> = {
@@ -48,5 +51,18 @@ export function serviceHreflangAlternates(baseSlug: string): Record<string, stri
     languages['en-PK'] = url;
     languages['x-default'] = url;
   }
+  return languages;
+}
+
+/**
+ * hreflang set for the six country hubs (/locations/{country}); x-default is the /locations
+ * index. Emitted identically on every hub and on /locations so the set is reciprocal.
+ */
+export function countryHubHreflangAlternates(): Record<string, string> {
+  const languages: Record<string, string> = {};
+  for (const [country, code] of Object.entries(COUNTRY_HREFLANG)) {
+    languages[code] = `${SITE_URL}/locations/${country}`;
+  }
+  languages['x-default'] = `${SITE_URL}/locations`;
   return languages;
 }

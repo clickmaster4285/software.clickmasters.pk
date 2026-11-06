@@ -309,7 +309,10 @@ export default function CountryServicesSection({
         </div>
 
         {/* Tabs */}
+        {/* lazyMount: only the active tab's cards are rendered (open item #15 — every tab was in
+            the HTML). All country service links stay server-rendered in the A–Z list on the page. */}
         <Tabs.Root
+          lazyMount
           value={activeTab}
           onValueChange={(d) => {
             setActiveTab(d.value);

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import BlogPost from '../../../lib/models/BlogPost';
 import dbConnect from '../../../lib/mongoose';
 import { calculateReadTime } from '../../../src/lib/readTime';
+import { toBlogCard } from '../../../src/lib/blog-cards';
 
 const BlogPostModel = BlogPost as any;
 
@@ -39,7 +40,8 @@ function normalizeFaqs(raw: unknown) {
     .filter((item): item is { question: string; answer: string } => Boolean(item));
 }
 
-// GET: published only by default; ?drafts=1 returns all (admin UI)
+// GET: published only by default; ?drafts=1 returns all (admin UI);
+// ?fields=card returns listing fields only (no post body) for the public /blog index.
 export async function GET(req: NextRequest) {
   try {
     await dbConnect();
@@ -48,6 +50,9 @@ export async function GET(req: NextRequest) {
     const filter = drafts ? {} : { published: true };
 
     const list = await BlogPostModel.find(filter).sort({ createdAt: -1 }).lean();
+    if (searchParams.get('fields') === 'card') {
+      return NextResponse.json(list.map(toBlogCard));
+    }
     return NextResponse.json(list);
   } catch (err: unknown) {
     console.error('GET /blog error:', err);

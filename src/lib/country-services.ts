@@ -73265,20 +73265,29 @@ export function getAllCountryServicePages(): CountryServicePageContent[] {
     services.forEach((service) => {
       const baseSlug = service.slug.replace(COUNTRY_SUFFIX_RE, '');
       const globalPage = getServicePage(baseSlug);
+      const serviceName = deriveServiceName(service);
+      const rawSections = service.sections?.length ? service.sections : globalPage?.sections ?? [];
 
       allPages.push({
         ...service,
         categorySlug: country,
         countryName: countryData.name,
         countryCode: getCountryCode(country),
-        serviceName: deriveServiceName(service),
+        serviceName,
         slug: service.slug,
         title: service.title,
-        metaTitle: service.title,
+        // Open item #11 — "{Service} in {Country}" (brand appended once by buildPageMetadata)
+        metaTitle: `${serviceName} in ${countryData.name}`,
         metaDescription: service.metaDescription,
         lead: globalPage?.lead ?? service.metaDescription,
         highlights: service.highlights?.length ? service.highlights : globalPage?.highlights,
-        sections: service.sections?.length ? service.sections : globalPage?.sections ?? [],
+        // Open item #14 — the shared "Why {Country} Companies Choose ClickMasters" H2 appeared on
+        // all 107 pages per country; name the service so each page's heading is unique.
+        sections: rawSections.map((section) =>
+          /^Why .+ Companies Choose ClickMasters$/i.test(section.heading ?? '')
+            ? { ...section, heading: `Why ${countryData.name} Companies Choose ClickMasters for ${serviceName}` }
+            : section
+        ),
         servicesCards: globalPage?.servicesCards?.map((card) => ({
           title: card.title,
           description: card.description,
